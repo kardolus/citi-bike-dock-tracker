@@ -7,6 +7,11 @@ type NormalizedStationData struct {
 	TimeStamp time.Time           `json:"timeStamp"`
 }
 
+type NormalizedStationDataTS struct {
+	Station   NormalizedStation `json:"station"`
+	TimeStamp time.Time         `json:"timestamp"`
+}
+
 type NormalizedStation struct {
 	ID                  string  `json:"id"`
 	Name                string  `json:"name"`

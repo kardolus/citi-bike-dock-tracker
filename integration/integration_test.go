@@ -94,5 +94,21 @@ func testIntegration(t *testing.T, when spec.G, it spec.S) {
 			Expect(result.Stations[3].IsRenting).To(BeFalse())
 			Expect(result.Stations[3].IsInstalled).To(BeTrue())
 		})
+		it("should return the expected result when the --id flag is used on the info command", func() {
+			command := exec.Command(binaryPath, "info", "--id", "37a37e5b-f975-4f92-a897-dca8e4670631", "--id", "c00ef46d-fcde-48e2-afbd-0fb595fe3fa7")
+			session, err := gexec.Start(command, io.Discard, io.Discard)
+			Expect(err).NotTo(HaveOccurred())
+
+			Eventually(session).Should(gexec.Exit(exitSuccess))
+
+			output := string(session.Out.Contents())
+
+			var result types.NormalizedStationData
+			Expect(json.Unmarshal([]byte(output), &result)).To(Succeed())
+			Expect(result.Stations).To(HaveLen(2))
+
+			Expect(result.Stations[0].ID).To(Equal("c00ef46d-fcde-48e2-afbd-0fb595fe3fa7"))
+			Expect(result.Stations[1].ID).To(Equal("37a37e5b-f975-4f92-a897-dca8e4670631"))
+		})
 	})
 }
