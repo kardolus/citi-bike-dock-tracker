@@ -126,40 +126,47 @@ func (c *Client) ParseStationData() (types.NormalizedStationData, error) {
 	}
 
 	for _, stationStatus := range statusData.Data.Stations {
-		var (
-			item        types.NormalizedStation
-			stationInfo types.StationEntity
-		)
-
-		if _, ok := c.stationMap[stationStatus.StationID]; ok {
-			stationInfo = c.stationMap[stationStatus.StationID]
-		} else {
-			continue
+		if stationInfo, ok := c.stationMap[stationStatus.StationID]; ok {
+			item := normalizeStationData(stationStatus, stationInfo)
+			result.Stations = append(result.Stations, item)
 		}
-
-		item.ID = stationStatus.StationID
-		item.Name = stationInfo.Name
-		item.Longitude = stationInfo.Lon
-		item.Latitude = stationInfo.Lat
-		item.Location = fmt.Sprintf(GoogleMapsQuery, stationInfo.Lat, stationInfo.Lon)
-		item.Status = stationStatus.StationStatus
-		item.BikesAvailable = stationStatus.NumBikesAvailable
-		item.EBikesAvailable = stationStatus.NumEbikesAvailable
-		item.BikesDisabled = stationStatus.NumBikesDisabled
-		item.DocksAvailable = stationStatus.NumDocksAvailable
-		item.DocksDisabled = stationStatus.NumDocksDisabled
-		item.ScootersAvailable = stationStatus.NumScootersAvailable
-		item.ScootersUnavailable = stationStatus.NumScootersUnavailable
-		item.IsReturning = stationStatus.IsReturning == 1
-		item.IsRenting = stationStatus.IsRenting == 1
-		item.IsInstalled = stationStatus.IsInstalled == 1
-
-		result.Stations = append(result.Stations, item)
 	}
 
 	result.TimeStamp = c.timeProvider.Now()
 
 	return result, nil
+}
+
+// PrintStationDataJSONL fetches station status information from the Citi Bike API and combines
+// it with pre-fetched station information to create a set of normalized data. The normalized data
+// is printed to stdout in the JSONL format.
+//
+// The function runs indefinitely, fetching new data every minute. To stop the function, you must
+// interrupt the program manually.
+func (c *Client) PrintStationDataJSONL() {
+	for {
+		statusData, err := c.getStationStatus()
+		if err != nil {
+			continue
+		}
+
+		for _, stationStatus := range statusData.Data.Stations {
+			if stationInfo, ok := c.stationMap[stationStatus.StationID]; ok {
+				item := normalizeStationData(stationStatus, stationInfo)
+				data := types.NormalizedStationDataTS{
+					Station:   item,
+					TimeStamp: c.timeProvider.Now(),
+				}
+
+				jsonl, err := json.Marshal(data)
+				if err != nil {
+					continue
+				}
+				fmt.Println(string(jsonl))
+			}
+		}
+		time.Sleep(1 * time.Minute)
+	}
 }
 
 func (c *Client) getStationStatus() (types.StationStatus, error) {
@@ -186,4 +193,27 @@ func processResponse(raw []byte, v interface{}) error {
 	}
 
 	return nil
+}
+
+func normalizeStationData(stationStatus types.Station, stationInfo types.StationEntity) types.NormalizedStation {
+	var item types.NormalizedStation
+
+	item.ID = stationStatus.StationID
+	item.Name = stationInfo.Name
+	item.Longitude = stationInfo.Lon
+	item.Latitude = stationInfo.Lat
+	item.Location = fmt.Sprintf(GoogleMapsQuery, stationInfo.Lat, stationInfo.Lon)
+	item.Status = stationStatus.StationStatus
+	item.BikesAvailable = stationStatus.NumBikesAvailable
+	item.EBikesAvailable = stationStatus.NumEbikesAvailable
+	item.BikesDisabled = stationStatus.NumBikesDisabled
+	item.DocksAvailable = stationStatus.NumDocksAvailable
+	item.DocksDisabled = stationStatus.NumDocksDisabled
+	item.ScootersAvailable = stationStatus.NumScootersAvailable
+	item.ScootersUnavailable = stationStatus.NumScootersUnavailable
+	item.IsReturning = stationStatus.IsReturning == 1
+	item.IsRenting = stationStatus.IsRenting == 1
+	item.IsInstalled = stationStatus.IsInstalled == 1
+
+	return item
 }

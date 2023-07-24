@@ -48,6 +48,16 @@ func main() {
 	}
 	rootCmd.AddCommand(cmdVersion)
 
+	var cmdTs = &cobra.Command{
+		Use:   "ts",
+		Short: "Retrieve and display Citibike dock station status with timestamps in JSONL format.",
+		Long:  "The 'ts' command retrieves and displays the current status of Citibike dock stations with timestamps in JSON Lines (JSONL) format.",
+		RunE:  runTs,
+	}
+
+	cmdTs.Flags().StringSliceVar(&ids, "id", []string{}, "Filter dock station status by IDs")
+	rootCmd.AddCommand(cmdTs)
+
 	if err := rootCmd.Execute(); err != nil {
 		fmt.Println(err)
 		os.Exit(1)
@@ -82,6 +92,27 @@ func runInfo(cmd *cobra.Command, args []string) error {
 	}
 
 	fmt.Println(string(result))
+
+	return nil
+}
+
+func runTs(cmd *cobra.Command, args []string) error {
+	builder := client.NewClientBuilder(http.New(), client.RealTime{})
+
+	if ServiceURL != "" {
+		builder = builder.WithServiceURL(ServiceURL)
+	}
+
+	if len(ids) > 0 {
+		builder = builder.WithIDFilter(ids)
+	}
+
+	c, err := builder.Build()
+	if err != nil {
+		return err
+	}
+
+	c.PrintStationDataJSONL()
 
 	return nil
 }
