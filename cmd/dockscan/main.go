@@ -4,7 +4,6 @@ import (
 	"encoding/json"
 	"fmt"
 	"github.com/kardolus/citi-bike-dock-tracker/client"
-	"github.com/kardolus/citi-bike-dock-tracker/http"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 	"os"
@@ -15,6 +14,7 @@ var (
 	GitVersion string
 	ServiceURL string
 	ids        []string
+	interval   int
 )
 
 func main() {
@@ -56,6 +56,8 @@ func main() {
 	}
 
 	cmdTs.Flags().StringSliceVar(&ids, "id", []string{}, "Filter dock station status by IDs")
+	cmdTs.Flags().IntVar(&interval, "interval", 60, "Set the time interval (in seconds) between fetching station status updates")
+
 	rootCmd.AddCommand(cmdTs)
 
 	if err := rootCmd.Execute(); err != nil {
@@ -65,7 +67,7 @@ func main() {
 }
 
 func runInfo(cmd *cobra.Command, args []string) error {
-	builder := client.NewClientBuilder(http.New(), client.RealTime{})
+	builder := client.NewClientBuilder()
 
 	if ServiceURL != "" {
 		builder = builder.WithServiceURL(ServiceURL)
@@ -97,7 +99,7 @@ func runInfo(cmd *cobra.Command, args []string) error {
 }
 
 func runTs(cmd *cobra.Command, args []string) error {
-	builder := client.NewClientBuilder(http.New(), client.RealTime{})
+	builder := client.NewClientBuilder()
 
 	if ServiceURL != "" {
 		builder = builder.WithServiceURL(ServiceURL)
@@ -105,6 +107,10 @@ func runTs(cmd *cobra.Command, args []string) error {
 
 	if len(ids) > 0 {
 		builder = builder.WithIDFilter(ids)
+	}
+
+	if interval > 0 {
+		builder = builder.WithInterval(interval)
 	}
 
 	c, err := builder.Build()

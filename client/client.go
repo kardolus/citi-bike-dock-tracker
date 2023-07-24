@@ -10,6 +10,7 @@ import (
 )
 
 const (
+	DefaultInterval        = 60 // in seconds
 	DefaultServiceURL      = "https://gbfs.citibikenyc.com"
 	ErrEmptyResponse       = "empty response"
 	GoogleMapsQuery        = "https://www.google.com/maps/?q=%f,%f"
@@ -34,6 +35,7 @@ type Client struct {
 	caller       http.Caller
 	stationMap   map[string]types.StationEntity
 	timeProvider TimeProvider
+	interval     int
 	serviceURL   string
 }
 
@@ -41,18 +43,26 @@ type ClientBuilder struct {
 	caller       http.Caller
 	stationMap   map[string]types.StationEntity
 	timeProvider TimeProvider
+	interval     int
 	serviceURL   string
 	filteredIDs  map[string]bool
 }
 
-func NewClientBuilder(caller http.Caller, timeProvider TimeProvider) *ClientBuilder {
+func NewClientBuilder() *ClientBuilder {
 	return &ClientBuilder{
-		caller:       caller,
+		caller:       http.New(),
 		stationMap:   make(map[string]types.StationEntity),
-		timeProvider: timeProvider,
+		interval:     DefaultInterval,
+		timeProvider: RealTime{},
 		serviceURL:   DefaultServiceURL,
 		filteredIDs:  make(map[string]bool),
 	}
+}
+
+// WithCaller overwrites the default http caller
+func (b *ClientBuilder) WithCaller(caller http.Caller) *ClientBuilder {
+	b.caller = caller
+	return b
 }
 
 // WithIDFilter adds a filter to only look for specific station IDs
@@ -63,9 +73,21 @@ func (b *ClientBuilder) WithIDFilter(ids []string) *ClientBuilder {
 	return b
 }
 
+// WithInterval overwrites the default interval
+func (b *ClientBuilder) WithInterval(interval int) *ClientBuilder {
+	b.interval = interval
+	return b
+}
+
 // WithServiceURL overwrites the default service URL
 func (b *ClientBuilder) WithServiceURL(url string) *ClientBuilder {
 	b.serviceURL = url
+	return b
+}
+
+// WithTimeProvider overwrites the default time provider
+func (b *ClientBuilder) WithTimeProvider(provider TimeProvider) *ClientBuilder {
+	b.timeProvider = provider
 	return b
 }
 
@@ -89,6 +111,7 @@ func (b *ClientBuilder) Build() (*Client, error) {
 	return &Client{
 		caller:       b.caller,
 		stationMap:   b.stationMap,
+		interval:     b.interval,
 		timeProvider: b.timeProvider,
 		serviceURL:   b.serviceURL,
 	}, nil
@@ -165,7 +188,8 @@ func (c *Client) PrintStationDataJSONL() {
 				fmt.Println(string(jsonl))
 			}
 		}
-		time.Sleep(1 * time.Minute)
+
+		time.Sleep(time.Duration(c.interval) * time.Second)
 	}
 }
 

@@ -44,7 +44,7 @@ func testClient(t *testing.T, when spec.G, it spec.S) {
 			malformed := `{"invalid":"json"` // missing closing brace
 			mockCaller.EXPECT().Get(client.DefaultServiceURL+client.StationInformationPath).Return([]byte(malformed), nil)
 
-			builder := client.NewClientBuilder(mockCaller, mockTimeProvider)
+			builder := client.NewClientBuilder().WithTimeProvider(mockTimeProvider).WithCaller(mockCaller)
 			_, err := builder.Build()
 
 			Expect(err).To(HaveOccurred())
@@ -53,7 +53,7 @@ func testClient(t *testing.T, when spec.G, it spec.S) {
 		it("throws an error when the response is empty", func() {
 			mockCaller.EXPECT().Get(client.DefaultServiceURL+client.StationInformationPath).Return(nil, nil)
 
-			builder := client.NewClientBuilder(mockCaller, mockTimeProvider)
+			builder := client.NewClientBuilder().WithTimeProvider(mockTimeProvider).WithCaller(mockCaller)
 			_, err := builder.Build()
 
 			Expect(err).To(HaveOccurred())
@@ -67,7 +67,7 @@ func testClient(t *testing.T, when spec.G, it spec.S) {
 
 			ids := []string{"c00ef46d-fcde-48e2-afbd-0fb595fe3fa7", "37a37e5b-f975-4f92-a897-dca8e4670631"}
 
-			builder := client.NewClientBuilder(mockCaller, mockTimeProvider).WithIDFilter(ids)
+			builder := client.NewClientBuilder().WithIDFilter(ids).WithTimeProvider(mockTimeProvider).WithCaller(mockCaller)
 			subject, err = builder.Build()
 
 			Expect(err).NotTo(HaveOccurred())
@@ -96,7 +96,7 @@ func testClient(t *testing.T, when spec.G, it spec.S) {
 
 			mockCaller.EXPECT().Get(client.DefaultServiceURL+client.StationInformationPath).Return(response, nil).Times(1)
 
-			builder := client.NewClientBuilder(mockCaller, mockTimeProvider)
+			builder := client.NewClientBuilder().WithTimeProvider(mockTimeProvider).WithCaller(mockCaller)
 			subject, err = builder.Build()
 
 			Expect(err).NotTo(HaveOccurred())

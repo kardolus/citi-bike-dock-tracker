@@ -5,13 +5,14 @@
 1. [Introduction](#introduction)
     - [Output](#output)
 2. [Installation](#installation)
-   - [Apple M1 chips](#apple-m1-chips)
-   - [macOS Intel chips](#macos-intel-chips)
-   - [Linux (amd64)](#linux-amd64)
-   - [Linux (arm64)](#linux-arm64)
-   - [Windows (amd64)](#windows-amd64)
+    - [Apple M1 chips](#apple-m1-chips)
+    - [macOS Intel chips](#macos-intel-chips)
+    - [Linux (amd64)](#linux-amd64)
+    - [Linux (arm64)](#linux-arm64)
+    - [Windows (amd64)](#windows-amd64)
 3. [Usage](#usage)
     - [Filtering by ID](#filtering-by-id)
+    - [Time series data](#time-series-data)
 4. [Development](#development)
 5. [Uninstallation](#uninstallation)
 6. [Contributing](#contributing)
@@ -60,6 +61,9 @@ and docks.
 
 ## Installation
 
+The installation steps differ depending on the type of chip your device uses. Below, you can find installation steps for
+a variety of common systems:
+
 ### Apple M1 chips
 
 ```shell
@@ -95,25 +99,21 @@ Choose the appropriate command for your system, which will download the binary, 
 
 ## Usage
 
-To use the dockscan, follow these steps:
+The `dockscan` CLI tool has several commands for interacting with the Citi Bike data:
 
-1. Clone the repository.
-2. Ensure that you have Golang set up on your local machine.
-3. Run the Golang scripts to start fetching and storing the data using the `dockscan` binary, like so:
+### Basic information fetching
+
+To fetch the current data and output it to your terminal in JSON format, run:
 
 ```shell
 ./bin/dockscan info
 ```
-
-This will fetch the current data and output it to your terminal in JSON format.
 
 To better interpret the JSON output, you can use a tool like `jq`:
 
 ```shell
 ./bin/dockscan info | jq .
 ```
-
-Instructions on how to run the Python analysis scripts on Noteable will be added soon.
 
 ### Filtering by ID
 
@@ -123,9 +123,18 @@ You can filter the data to only show the status of certain stations by providing
 ./bin/dockscan info --id 37a37e5b-f975-4f92-a897-dca8e4670631 --id c00ef46d-fcde-48e2-afbd-0fb595fe3fa7
 ```
 
+### Time series data
+
+You can collect time series data for a given station by using the `ts` command, providing the station's ID, and
+specifying the interval (in seconds) at which data should be collected with the `--interval` flag:
+
+```shell
+./bin/dockscan ts --id 37a37e5b-f975-4f92-a897-dca8e4670631 --interval 300 
+```
+
 ## Development
 
-Follow these steps for running tests and building the application:
+For developing the `dockscan` CLI tool, use the following steps to run tests and build the application:
 
 1. Run the tests using the following scripts:
 
@@ -167,8 +176,8 @@ To run all tests, use:
 
 ## Uninstallation
 
-If for any reason you wish to uninstall the dockscan CLI application from your system, you can do so by following these
-steps:
+If for any reason you wish to uninstall the `dockscan` CLI application from your system, you can do so by following
+these steps:
 
 ### MacOS / Linux
 
