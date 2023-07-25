@@ -8,6 +8,7 @@ import (
 	"github.com/kardolus/citi-bike-dock-tracker/http"
 	"github.com/kardolus/citi-bike-dock-tracker/types"
 	"os"
+	"path/filepath"
 	"time"
 )
 
@@ -34,20 +35,25 @@ func (RealTime) Now() time.Time {
 var _ TimeProvider = &RealTime{}
 
 type Client struct {
-	caller       http.Caller
-	stationMap   map[string]types.StationEntity
-	timeProvider TimeProvider
-	interval     int
-	serviceURL   string
+	caller          http.Caller
+	stationMap      map[string]types.StationEntity
+	timeProvider    TimeProvider
+	interval        int
+	serviceURL      string
+	writer          *csv.Writer
+	currentDate     time.Time
+	outputDirectory string
 }
 
 type ClientBuilder struct {
-	caller       http.Caller
-	stationMap   map[string]types.StationEntity
-	timeProvider TimeProvider
-	interval     int
-	serviceURL   string
-	filteredIDs  map[string]bool
+	caller          http.Caller
+	stationMap      map[string]types.StationEntity
+	timeProvider    TimeProvider
+	interval        int
+	serviceURL      string
+	filteredIDs     map[string]bool
+	writer          *csv.Writer
+	outputDirectory string
 }
 
 func NewClientBuilder() *ClientBuilder {
@@ -81,6 +87,12 @@ func (b *ClientBuilder) WithInterval(interval int) *ClientBuilder {
 	return b
 }
 
+// WithOutputDirectory specifies the directory to which CSV files should be written
+func (b *ClientBuilder) WithOutputDirectory(dir string) *ClientBuilder {
+	b.outputDirectory = dir
+	return b
+}
+
 // WithServiceURL overwrites the default service URL
 func (b *ClientBuilder) WithServiceURL(url string) *ClientBuilder {
 	b.serviceURL = url
@@ -90,6 +102,12 @@ func (b *ClientBuilder) WithServiceURL(url string) *ClientBuilder {
 // WithTimeProvider overwrites the default time provider
 func (b *ClientBuilder) WithTimeProvider(provider TimeProvider) *ClientBuilder {
 	b.timeProvider = provider
+	return b
+}
+
+// WithWriter adds a writer to the client
+func (b *ClientBuilder) WithWriter(writer *csv.Writer) *ClientBuilder {
+	b.writer = writer
 	return b
 }
 
@@ -111,11 +129,14 @@ func (b *ClientBuilder) Build() (*Client, error) {
 	}
 
 	return &Client{
-		caller:       b.caller,
-		stationMap:   b.stationMap,
-		interval:     b.interval,
-		timeProvider: b.timeProvider,
-		serviceURL:   b.serviceURL,
+		caller:          b.caller,
+		stationMap:      b.stationMap,
+		interval:        b.interval,
+		timeProvider:    b.timeProvider,
+		serviceURL:      b.serviceURL,
+		writer:          b.writer,
+		currentDate:     b.timeProvider.Now().Truncate(24 * time.Hour),
+		outputDirectory: b.outputDirectory,
 	}, nil
 }
 
@@ -197,7 +218,17 @@ func (c *Client) PrintStationDataJSONL() {
 // the error and exits. The function runs indefinitely, and each iteration is separated by a sleep
 // interval defined by the client.
 func (c *Client) PrintStationDataCSV(excludeColumns []string) {
-	w := csv.NewWriter(os.Stdout)
+	var w *csv.Writer
+
+	if c.outputDirectory == "" {
+		w = csv.NewWriter(os.Stdout)
+	} else {
+		currentDay := c.timeProvider.Now().Truncate(24 * time.Hour)
+		filename := filepath.Join(c.outputDirectory, currentDay.Format("2006-01-02")+".csv")
+		file, _ := os.Create(filename)
+		w = csv.NewWriter(file)
+	}
+
 	headers := []string{
 		"ID",
 		"Name",
@@ -227,6 +258,14 @@ func (c *Client) PrintStationDataCSV(excludeColumns []string) {
 	_ = w.Write(finalHeaders)
 
 	for {
+		currentDay := c.timeProvider.Now().UTC().Truncate(24 * time.Hour)
+		if currentDay.After(c.currentDate) {
+			c.writer.Flush()
+			c.writer = createNewWriter(currentDay, c.outputDirectory)
+			_ = c.writer.Write(finalHeaders)
+			c.currentDate = currentDay
+		}
+
 		stationData, err := c.gatherStationData()
 		if err != nil {
 			continue
@@ -305,12 +344,14 @@ func (c *Client) gatherStationData() ([]types.NormalizedStationDataTS, error) {
 		return nil, err
 	}
 
+	now := c.timeProvider.Now()
+
 	for _, stationStatus := range statusData.Data.Stations {
 		if stationInfo, ok := c.stationMap[stationStatus.StationID]; ok {
 			item := normalizeStationData(stationStatus, stationInfo)
 			data := types.NormalizedStationDataTS{
 				Station:   item,
-				TimeStamp: c.timeProvider.Now(),
+				TimeStamp: now,
 			}
 			stationData = append(stationData, data)
 		}
@@ -333,16 +374,11 @@ func (c *Client) getStationStatus() (types.StationStatus, error) {
 	return response, nil
 }
 
-func processResponse(raw []byte, v interface{}) error {
-	if raw == nil {
-		return errors.New(ErrEmptyResponse)
-	}
+func createNewWriter(currentDay time.Time, dir string) *csv.Writer {
+	filename := filepath.Join(dir, currentDay.Format("2006-01-02")+".csv")
+	file, _ := os.Create(filename)
 
-	if err := json.Unmarshal(raw, v); err != nil {
-		return fmt.Errorf("failed to decode response: %w", err)
-	}
-
-	return nil
+	return csv.NewWriter(file)
 }
 
 func normalizeStationData(stationStatus types.Station, stationInfo types.StationEntity) types.NormalizedStation {
@@ -366,4 +402,16 @@ func normalizeStationData(stationStatus types.Station, stationInfo types.Station
 	item.IsInstalled = stationStatus.IsInstalled == 1
 
 	return item
+}
+
+func processResponse(raw []byte, v interface{}) error {
+	if raw == nil {
+		return errors.New(ErrEmptyResponse)
+	}
+
+	if err := json.Unmarshal(raw, v); err != nil {
+		return fmt.Errorf("failed to decode response: %w", err)
+	}
+
+	return nil
 }

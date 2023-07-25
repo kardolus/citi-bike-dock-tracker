@@ -14,6 +14,7 @@
     - [Filtering by ID](#filtering-by-id)
     - [Time series data](#time-series-data)
     - [Excluding columns](#excluding-columns)
+    - [Specify Output Directory](#specify-output-directory)
 4. [Development](#development)
 5. [Uninstallation](#uninstallation)
 6. [Contributing](#contributing)
@@ -150,7 +151,7 @@ For CSV:
 ./bin/dockscan ts --id 37a37e5b-f975-4f92-a897-dca8e4670631 --interval 300 --csv
 ```
 
-### Excluding columns 
+### Excluding columns
 
 You can exclude certain columns from the output by providing their names with the --exclude flag:
 
@@ -158,10 +159,18 @@ You can exclude certain columns from the output by providing their names with th
 ./bin/dockscan ts --csv --exclude Longitude,Latitude,Location,ID
 ```
 
-This command would produce output that
-excludes the 'longitude' and 'latitude' columns from each station's data. The --exclude flag is case-insensitive,
-meaning --exclude Longitude would also work. You can use the --exclude flag with any column names that appear in the
-output.
+This command would produce output that excludes the 'Longitude', 'Latitude',  'Location' and 'ID' columns from each
+station's data. The --exclude flag is case-insensitive, meaning --exclude Longitude would also work. You can use the
+--exclude flag with any column names that appear in the output.
+
+### Specify Output Directory
+
+You can specify an output directory. This will create a CSV based on the current date (ie. 2023-07-23.csv) and put in
+the current directory. When the date changes, so does the name of the CSV.
+
+```shell
+./bin/dockscan ts --csv --outdir /tmp
+```
 
 ## Development
 

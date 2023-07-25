@@ -67,6 +67,9 @@ func testClient(t *testing.T, when spec.G, it spec.S) {
 
 			ids := []string{"c00ef46d-fcde-48e2-afbd-0fb595fe3fa7", "37a37e5b-f975-4f92-a897-dca8e4670631"}
 
+			now := time.Now()
+			mockTimeProvider.EXPECT().Now().Return(now).Times(1)
+
 			builder := client.NewClientBuilder().WithIDFilter(ids).WithTimeProvider(mockTimeProvider).WithCaller(mockCaller)
 			subject, err = builder.Build()
 
@@ -77,7 +80,6 @@ func testClient(t *testing.T, when spec.G, it spec.S) {
 
 			mockCaller.EXPECT().Get(client.DefaultServiceURL+client.StationStatusPath).Return(response, nil).Times(1)
 
-			now := time.Now()
 			mockTimeProvider.EXPECT().Now().Return(now).Times(1)
 
 			result, err := subject.ParseStationData()
@@ -95,6 +97,9 @@ func testClient(t *testing.T, when spec.G, it spec.S) {
 			Expect(err).NotTo(HaveOccurred())
 
 			mockCaller.EXPECT().Get(client.DefaultServiceURL+client.StationInformationPath).Return(response, nil).Times(1)
+
+			now := time.Now()
+			mockTimeProvider.EXPECT().Now().Return(now).Times(1)
 
 			builder := client.NewClientBuilder().WithTimeProvider(mockTimeProvider).WithCaller(mockCaller)
 			subject, err = builder.Build()

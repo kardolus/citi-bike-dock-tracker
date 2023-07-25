@@ -17,6 +17,7 @@ var (
 	exclude    []string
 	interval   int
 	csv        bool
+	output     string
 )
 
 func main() {
@@ -59,6 +60,9 @@ func main() {
 			if cmd.Flags().Changed("exclude") && !cmd.Flags().Changed("csv") {
 				return fmt.Errorf("--exclude requires --csv")
 			}
+			if cmd.Flags().Changed("output") && !cmd.Flags().Changed("csv") {
+				return fmt.Errorf("--output requires --csv")
+			}
 			return nil
 		},
 	}
@@ -67,6 +71,7 @@ func main() {
 	cmdTs.Flags().IntVar(&interval, "interval", 60, "Set the time interval (in seconds) between fetching station status updates")
 	cmdTs.Flags().BoolVar(&csv, "csv", false, "Output station status in CSV format")
 	cmdTs.Flags().StringSliceVar(&exclude, "exclude", []string{}, "Exclude columns from the CSV output")
+	cmdTs.Flags().StringVar(&output, "output", "", "Directory to save the output")
 
 	rootCmd.AddCommand(cmdTs)
 
@@ -121,6 +126,10 @@ func runTs(cmd *cobra.Command, args []string) error {
 
 	if interval > 0 {
 		builder = builder.WithInterval(interval)
+	}
+
+	if output != "" {
+		builder = builder.WithOutputDirectory(output)
 	}
 
 	c, err := builder.Build()
