@@ -28,7 +28,8 @@ type TimeProvider interface {
 type RealTime struct{}
 
 func (RealTime) Now() time.Time {
-	return time.Now()
+	location, _ := time.LoadLocation("America/New_York")
+	return time.Now().In(location)
 }
 
 // Ensure RealTime implements TimeProvider interface
@@ -40,7 +41,6 @@ type Client struct {
 	timeProvider    TimeProvider
 	interval        int
 	serviceURL      string
-	writer          *csv.Writer
 	currentDate     time.Time
 	outputDirectory string
 }
@@ -52,7 +52,6 @@ type ClientBuilder struct {
 	interval        int
 	serviceURL      string
 	filteredIDs     map[string]bool
-	writer          *csv.Writer
 	outputDirectory string
 }
 
@@ -105,12 +104,6 @@ func (b *ClientBuilder) WithTimeProvider(provider TimeProvider) *ClientBuilder {
 	return b
 }
 
-// WithWriter adds a writer to the client
-func (b *ClientBuilder) WithWriter(writer *csv.Writer) *ClientBuilder {
-	b.writer = writer
-	return b
-}
-
 // Build creates the Client instance
 func (b *ClientBuilder) Build() (*Client, error) {
 	stationInfo, err := b.getStationInformation()
@@ -134,8 +127,7 @@ func (b *ClientBuilder) Build() (*Client, error) {
 		interval:        b.interval,
 		timeProvider:    b.timeProvider,
 		serviceURL:      b.serviceURL,
-		writer:          b.writer,
-		currentDate:     b.timeProvider.Now().Truncate(24 * time.Hour),
+		currentDate:     startOfDay(b.timeProvider.Now()),
 		outputDirectory: b.outputDirectory,
 	}, nil
 }
@@ -223,7 +215,7 @@ func (c *Client) PrintStationDataCSV(excludeColumns []string) {
 	if c.outputDirectory == "" {
 		w = csv.NewWriter(os.Stdout)
 	} else {
-		currentDay := c.timeProvider.Now().Truncate(24 * time.Hour)
+		currentDay := startOfDay(c.timeProvider.Now())
 		filename := filepath.Join(c.outputDirectory, currentDay.Format("2006-01-02")+".csv")
 		file, _ := os.Create(filename)
 		w = csv.NewWriter(file)
@@ -258,11 +250,11 @@ func (c *Client) PrintStationDataCSV(excludeColumns []string) {
 	_ = w.Write(finalHeaders)
 
 	for {
-		currentDay := c.timeProvider.Now().Truncate(24 * time.Hour)
+		currentDay := startOfDay(c.timeProvider.Now())
 		if currentDay.After(c.currentDate) {
-			c.writer.Flush()
-			c.writer = createNewWriter(currentDay, c.outputDirectory)
-			_ = c.writer.Write(finalHeaders)
+			w.Flush()
+			w = createNewWriter(currentDay, c.outputDirectory)
+			_ = w.Write(finalHeaders)
 			c.currentDate = currentDay
 		}
 
@@ -414,4 +406,8 @@ func processResponse(raw []byte, v interface{}) error {
 	}
 
 	return nil
+}
+
+func startOfDay(t time.Time) time.Time {
+	return time.Date(t.Year(), t.Month(), t.Day(), 0, 0, 0, 0, t.Location())
 }
