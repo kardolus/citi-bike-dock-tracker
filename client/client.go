@@ -215,10 +215,7 @@ func (c *Client) PrintStationDataCSV(excludeColumns []string) {
 	if c.outputDirectory == "" {
 		w = csv.NewWriter(os.Stdout)
 	} else {
-		currentDay := startOfDay(c.timeProvider.Now())
-		filename := filepath.Join(c.outputDirectory, currentDay.Format("2006-01-02")+".csv")
-		file, _ := os.Create(filename)
-		w = csv.NewWriter(file)
+		w = createNewWriter(c.currentDate, c.outputDirectory)
 	}
 
 	headers := []string{
