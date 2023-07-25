@@ -15,6 +15,7 @@ var (
 	ServiceURL string
 	ids        []string
 	interval   int
+	csv        bool
 )
 
 func main() {
@@ -57,6 +58,7 @@ func main() {
 
 	cmdTs.Flags().StringSliceVar(&ids, "id", []string{}, "Filter dock station status by IDs")
 	cmdTs.Flags().IntVar(&interval, "interval", 60, "Set the time interval (in seconds) between fetching station status updates")
+	cmdTs.Flags().BoolVar(&csv, "csv", false, "Output station status in CSV format")
 
 	rootCmd.AddCommand(cmdTs)
 
@@ -118,7 +120,11 @@ func runTs(cmd *cobra.Command, args []string) error {
 		return err
 	}
 
-	c.PrintStationDataJSONL()
+	if csv {
+		c.PrintStationDataCSV()
+	} else {
+		c.PrintStationDataJSONL()
+	}
 
 	return nil
 }

@@ -19,17 +19,26 @@
 
 ## Introduction
 
-This repository is designed to fetch, store, and analyze time series data related to the status of CitiBike docks in New
-York City. The information stored includes data about open docks, the number of standard and electric bikes available,
-and changes over time.
+Welcome to the `Citi Bike Dock Tracker` repository, a robust tool designed for tracking, storing, and analyzing
+time-series data relating to the status of CitiBike docking stations across New York City. This command-line interface (
+CLI) tool provides granular details about each dock, including the number of available standard and electric bikes, the
+number of open docks, and the progression of these variables over time.
 
-The primary data source for this project is CitiBike's General Bikeshare Feed Specification (GBFS) data feeds, which
-provide real-time information about station status (`https://gbfs.citibikenyc.com/gbfs/en/station_status.json`) and
-station information (`https://gbfs.citibikenyc.com/gbfs/en/station_information.json`).
+The primary data source for this application is CitiBike's General Bikeshare Feed Specification (GBFS) data feeds. The
+tracker retrieves real-time information from two distinct GBFS feeds:
 
-The `station_status.json` file is used to gather real-time information about each dock station's status, including the
-number of available bikes, open docks, and other relevant data. The `station_information.json` file is used to map the
-station IDs to their respective human-readable names, providing easier data interpretation.
+1. The Station Status feed (`https://gbfs.citibikenyc.com/gbfs/en/station_status.json`), which provides live updates
+   about each docking station's status, such as the number of available bikes, open docks, and more.
+2. The Station Information feed (`https://gbfs.citibikenyc.com/gbfs/en/station_information.json`), which delivers
+   essential information about each station, including its ID and human-readable name.
+
+By consolidating and interpreting these two data sources, our CLI tool provides comprehensive, up-to-the-minute insights
+into the operational state of CitiBike docking stations. Users can fetch data for all stations, filter by specific
+station IDs, or even track time-series data for specified stations at user-defined intervals.
+
+For maximum versatility, the `Citi Bike Dock Tracker` offers output in both JSON and CSV formats, catering to a wide
+array of data analysis and visualization needs. This makes it an ideal solution for bike users, data analysts, urban
+planners, and anyone else seeking to understand bike availability trends in real-time across New York City.
 
 ### Output
 
@@ -128,8 +137,16 @@ You can filter the data to only show the status of certain stations by providing
 You can collect time series data for a given station by using the `ts` command, providing the station's ID, and
 specifying the interval (in seconds) at which data should be collected with the `--interval` flag:
 
+For JSON:
+
 ```shell
 ./bin/dockscan ts --id 37a37e5b-f975-4f92-a897-dca8e4670631 --interval 300 
+```
+
+For CSV:
+
+```shell
+./bin/dockscan ts --id 37a37e5b-f975-4f92-a897-dca8e4670631 --interval 300 --csv
 ```
 
 ## Development

@@ -1,11 +1,13 @@
 package client
 
 import (
+	"encoding/csv"
 	"encoding/json"
 	"errors"
 	"fmt"
 	"github.com/kardolus/citi-bike-dock-tracker/http"
 	"github.com/kardolus/citi-bike-dock-tracker/types"
+	"os"
 	"time"
 )
 
@@ -168,29 +170,105 @@ func (c *Client) ParseStationData() (types.NormalizedStationData, error) {
 // interrupt the program manually.
 func (c *Client) PrintStationDataJSONL() {
 	for {
-		statusData, err := c.getStationStatus()
+		stationData, err := c.gatherStationData()
 		if err != nil {
 			continue
 		}
 
-		for _, stationStatus := range statusData.Data.Stations {
-			if stationInfo, ok := c.stationMap[stationStatus.StationID]; ok {
-				item := normalizeStationData(stationStatus, stationInfo)
-				data := types.NormalizedStationDataTS{
-					Station:   item,
-					TimeStamp: c.timeProvider.Now(),
-				}
-
-				jsonl, err := json.Marshal(data)
-				if err != nil {
-					continue
-				}
-				fmt.Println(string(jsonl))
+		for _, data := range stationData {
+			jsonl, err := json.Marshal(data)
+			if err != nil {
+				continue
 			}
+			fmt.Println(string(jsonl))
 		}
 
 		time.Sleep(time.Duration(c.interval) * time.Second)
 	}
+}
+
+// PrintStationDataCSV gathers station data periodically according to the client's interval
+// and prints it to the standard output (stdout) in CSV format. The CSV data includes a header row,
+// and each subsequent row represents the current state of a station.
+// The fields are StationID, Name, Longitude, Latitude, Location, Status, BikesAvailable,
+// EBikesAvailable, BikesDisabled, DocksAvailable, DocksDisabled, IsReturning, IsRenting,
+// IsInstalled, and TimeStamp. In case of an error while gathering data, the function continues with
+// the next iteration after the sleep interval. If writing to the CSV writer fails, the function logs
+// the error and exits. The function runs indefinitely, and each iteration is separated by a sleep
+// interval defined by the client.
+func (c *Client) PrintStationDataCSV() {
+	w := csv.NewWriter(os.Stdout)
+
+	_ = w.Write([]string{
+		"StationID",
+		"Name",
+		"Longitude",
+		"Latitude",
+		"Location",
+		"Status",
+		"BikesAvailable",
+		"EBikesAvailable",
+		"BikesDisabled",
+		"DocksAvailable",
+		"DocksDisabled",
+		"IsReturning",
+		"IsRenting",
+		"IsInstalled",
+		"TimeStamp",
+	})
+
+	for {
+		stationData, err := c.gatherStationData()
+		if err != nil {
+			continue
+		}
+
+		for _, data := range stationData {
+			record := []string{
+				data.Station.ID,
+				data.Station.Name,
+				fmt.Sprint(data.Station.Longitude),
+				fmt.Sprint(data.Station.Latitude),
+				data.Station.Location,
+				data.Station.Status,
+				fmt.Sprint(data.Station.BikesAvailable),
+				fmt.Sprint(data.Station.EBikesAvailable),
+				fmt.Sprint(data.Station.BikesDisabled),
+				fmt.Sprint(data.Station.DocksAvailable),
+				fmt.Sprint(data.Station.DocksDisabled),
+				fmt.Sprint(data.Station.IsReturning),
+				fmt.Sprint(data.Station.IsRenting),
+				fmt.Sprint(data.Station.IsInstalled),
+				data.TimeStamp.Format(time.RFC3339),
+			}
+			_ = w.Write(record)
+		}
+		w.Flush()
+
+		time.Sleep(time.Duration(c.interval) * time.Second)
+	}
+}
+
+func (c *Client) gatherStationData() ([]types.NormalizedStationDataTS, error) {
+	var stationData []types.NormalizedStationDataTS
+
+	statusData, err := c.getStationStatus()
+	if err != nil {
+		return nil, err
+	}
+
+	for _, stationStatus := range statusData.Data.Stations {
+		if stationInfo, ok := c.stationMap[stationStatus.StationID]; ok {
+			item := normalizeStationData(stationStatus, stationInfo)
+			data := types.NormalizedStationDataTS{
+				Station:   item,
+				TimeStamp: c.timeProvider.Now(),
+			}
+			stationData = append(stationData, data)
+		}
+	}
+
+	return stationData, nil
 }
 
 func (c *Client) getStationStatus() (types.StationStatus, error) {
