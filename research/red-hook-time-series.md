@@ -2,6 +2,8 @@
 
 ## Red Hook Stations
 
+For my analysis I first had to manually create a table of stations located in Red Hook.
+
 | ID                                   | Name                       |
 |--------------------------------------|----------------------------|
 | 66de1516-0aca-11e7-82f6-3863bb44ef7c | Coffey St & Conover St     |
@@ -24,7 +26,10 @@
 | 66de44ba-0aca-11e7-82f6-3863bb44ef7c | Carroll St & Columbia St   |
 | 66de63cd-0aca-11e7-82f6-3863bb44ef7c | Columbia St & Degraw St    |
 
-## Get info on these stations alone
+## Station Info
+
+To take a quick peak at the current state of the Citi Bike docks in Red Hook you can run the following command: 
+
 ```shell
 ./bin/dockscan info \
   --id 66de1516-0aca-11e7-82f6-3863bb44ef7c \
@@ -48,7 +53,10 @@
   --id 66de63cd-0aca-11e7-82f6-3863bb44ef7c | jq .
 ```
 
-## Create the time series data
+## Time Series Data
+
+In order to create CSVs with time series data you can run:
+
 ```shell
 ./bin/dockscan ts \
   --exclude Longitude,Latitude,Location,ID \
@@ -76,7 +84,7 @@
   --output ~/Documents/citibike/
 ```
 
-Let me break down this command for you:
+Break down of the command:
 
 - `./bin/dockscan ts`: This initiates the time series data collection command of `dockscan`.
 - `--exclude Longitude,Latitude,Location,ID`: This excludes the specified columns from the output CSV file.
@@ -87,3 +95,44 @@ Let me break down this command for you:
 - `--output-dir ~/Documents/citibike/`: This specifies the directory where the output CSV file will be stored, which in
   this case is the `citibike` folder inside the `Documents` directory. You can modify this path as per your needs.
 
+## Plot a graph
+
+[You can grab a CSV with data from July 25th 2023 here](2023-07-25.csv). For a graph with the average percentage of
+available docks you can use:
+
+```
+import pandas as pd
+import matplotlib.pyplot as plt
+
+# Load the data
+data = pd.read_csv('2023-07-25.csv')
+
+# Convert the 'TimeStamp' column to a datetime data type
+data['TimeStamp'] = pd.to_datetime(data['TimeStamp'])
+
+# Extract the hour from the 'TimeStamp' column
+data['Hour'] = data['TimeStamp'].dt.hour
+
+# Calculate the total capacity for each timestamp
+data['TotalCapacity'] = data['BikesDisabled'] + data['EBikesAvailable'] + data['BikesAvailable'] + data['DocksDisabled'] + data['DocksAvailable']
+
+# Calculate the percentage of available docks for each timestamp
+data['PercentageAvailable'] = (data['DocksAvailable'] / data['TotalCapacity']) * 100
+
+# Group by the 'Hour' column and calculate the average percentage of available docks
+grouped_data = data.groupby('Hour')['PercentageAvailable'].mean()
+
+# Create a bar chart
+plt.figure(figsize=(10, 6))
+plt.bar(grouped_data.index, grouped_data.values)
+plt.xlabel('Hour')
+plt.ylabel('Average Percentage of Available Docks')
+plt.title('Average Percentage of Available Docks per Hour')
+plt.show()
+```
+
+### Expected Output
+
+<p align="center">
+  <img src="../resources/docks.png">
+</p>
