@@ -258,7 +258,7 @@ func (c *Client) PrintStationDataCSV(excludeColumns []string) {
 	_ = w.Write(finalHeaders)
 
 	for {
-		currentDay := c.timeProvider.Now().UTC().Truncate(24 * time.Hour)
+		currentDay := c.timeProvider.Now().Truncate(24 * time.Hour)
 		if currentDay.After(c.currentDate) {
 			c.writer.Flush()
 			c.writer = createNewWriter(currentDay, c.outputDirectory)
