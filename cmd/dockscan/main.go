@@ -14,6 +14,7 @@ var (
 	GitVersion string
 	ServiceURL string
 	ids        []string
+	exclude    []string
 	interval   int
 	csv        bool
 )
@@ -59,6 +60,7 @@ func main() {
 	cmdTs.Flags().StringSliceVar(&ids, "id", []string{}, "Filter dock station status by IDs")
 	cmdTs.Flags().IntVar(&interval, "interval", 60, "Set the time interval (in seconds) between fetching station status updates")
 	cmdTs.Flags().BoolVar(&csv, "csv", false, "Output station status in CSV format")
+	cmdTs.Flags().StringSliceVar(&exclude, "exclude", []string{}, "Exclude specific columns from the CSV output")
 
 	rootCmd.AddCommand(cmdTs)
 
@@ -121,7 +123,7 @@ func runTs(cmd *cobra.Command, args []string) error {
 	}
 
 	if csv {
-		c.PrintStationDataCSV()
+		c.PrintStationDataCSV(exclude)
 	} else {
 		c.PrintStationDataJSONL()
 	}

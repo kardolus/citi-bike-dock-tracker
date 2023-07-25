@@ -13,6 +13,7 @@
 3. [Usage](#usage)
     - [Filtering by ID](#filtering-by-id)
     - [Time series data](#time-series-data)
+    - [Excluding columns](#excluding-columns)
 4. [Development](#development)
 5. [Uninstallation](#uninstallation)
 6. [Contributing](#contributing)
@@ -148,6 +149,19 @@ For CSV:
 ```shell
 ./bin/dockscan ts --id 37a37e5b-f975-4f92-a897-dca8e4670631 --interval 300 --csv
 ```
+
+### Excluding columns 
+
+You can exclude certain columns from the output by providing their names with the --exclude flag:
+
+```shell
+./bin/dockscan info --exclude longitude --exclude latitude 
+```
+
+This command would produce output that
+excludes the 'longitude' and 'latitude' columns from each station's data. The --exclude flag is case-insensitive,
+meaning --exclude Longitude would also work. You can use the --exclude flag with any column names that appear in the
+output.
 
 ## Development
 

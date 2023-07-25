@@ -196,10 +196,9 @@ func (c *Client) PrintStationDataJSONL() {
 // the next iteration after the sleep interval. If writing to the CSV writer fails, the function logs
 // the error and exits. The function runs indefinitely, and each iteration is separated by a sleep
 // interval defined by the client.
-func (c *Client) PrintStationDataCSV() {
+func (c *Client) PrintStationDataCSV(excludeColumns []string) {
 	w := csv.NewWriter(os.Stdout)
-
-	_ = w.Write([]string{
+	headers := []string{
 		"StationID",
 		"Name",
 		"Longitude",
@@ -215,7 +214,17 @@ func (c *Client) PrintStationDataCSV() {
 		"IsRenting",
 		"IsInstalled",
 		"TimeStamp",
-	})
+	}
+
+	// Prepare headers
+	var finalHeaders []string
+	for _, h := range headers {
+		if !contains(excludeColumns, h) {
+			finalHeaders = append(finalHeaders, h)
+		}
+	}
+
+	_ = w.Write(finalHeaders)
 
 	for {
 		stationData, err := c.gatherStationData()
@@ -224,22 +233,51 @@ func (c *Client) PrintStationDataCSV() {
 		}
 
 		for _, data := range stationData {
-			record := []string{
-				data.Station.ID,
-				data.Station.Name,
-				fmt.Sprint(data.Station.Longitude),
-				fmt.Sprint(data.Station.Latitude),
-				data.Station.Location,
-				data.Station.Status,
-				fmt.Sprint(data.Station.BikesAvailable),
-				fmt.Sprint(data.Station.EBikesAvailable),
-				fmt.Sprint(data.Station.BikesDisabled),
-				fmt.Sprint(data.Station.DocksAvailable),
-				fmt.Sprint(data.Station.DocksDisabled),
-				fmt.Sprint(data.Station.IsReturning),
-				fmt.Sprint(data.Station.IsRenting),
-				fmt.Sprint(data.Station.IsInstalled),
-				data.TimeStamp.Format(time.RFC3339),
+			var record []string
+			if !contains(excludeColumns, "StationID") {
+				record = append(record, data.Station.ID)
+			}
+			if !contains(excludeColumns, "Name") {
+				record = append(record, data.Station.Name)
+			}
+			if !contains(excludeColumns, "Longitude") {
+				record = append(record, fmt.Sprint(data.Station.Longitude))
+			}
+			if !contains(excludeColumns, "Latitude") {
+				record = append(record, fmt.Sprint(data.Station.Latitude))
+			}
+			if !contains(excludeColumns, "Location") {
+				record = append(record, data.Station.Location)
+			}
+			if !contains(excludeColumns, "Status") {
+				record = append(record, data.Station.Status)
+			}
+			if !contains(excludeColumns, "BikesAvailable") {
+				record = append(record, fmt.Sprint(data.Station.BikesAvailable))
+			}
+			if !contains(excludeColumns, "EBikesAvailable") {
+				record = append(record, fmt.Sprint(data.Station.EBikesAvailable))
+			}
+			if !contains(excludeColumns, "BikesDisabled") {
+				record = append(record, fmt.Sprint(data.Station.BikesDisabled))
+			}
+			if !contains(excludeColumns, "DocksAvailable") {
+				record = append(record, fmt.Sprint(data.Station.DocksAvailable))
+			}
+			if !contains(excludeColumns, "DocksDisabled") {
+				record = append(record, fmt.Sprint(data.Station.DocksDisabled))
+			}
+			if !contains(excludeColumns, "IsReturning") {
+				record = append(record, fmt.Sprint(data.Station.IsReturning))
+			}
+			if !contains(excludeColumns, "IsRenting") {
+				record = append(record, fmt.Sprint(data.Station.IsRenting))
+			}
+			if !contains(excludeColumns, "IsInstalled") {
+				record = append(record, fmt.Sprint(data.Station.IsInstalled))
+			}
+			if !contains(excludeColumns, "TimeStamp") {
+				record = append(record, data.TimeStamp.Format(time.RFC3339))
 			}
 			_ = w.Write(record)
 		}
@@ -247,6 +285,16 @@ func (c *Client) PrintStationDataCSV() {
 
 		time.Sleep(time.Duration(c.interval) * time.Second)
 	}
+}
+
+// Helper function to check if a slice contains a string
+func contains(slice []string, str string) bool {
+	for _, s := range slice {
+		if s == str {
+			return true
+		}
+	}
+	return false
 }
 
 func (c *Client) gatherStationData() ([]types.NormalizedStationDataTS, error) {
