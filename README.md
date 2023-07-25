@@ -155,7 +155,7 @@ For CSV:
 You can exclude certain columns from the output by providing their names with the --exclude flag:
 
 ```shell
-./bin/dockscan info --exclude longitude --exclude latitude 
+./bin/dockscan ts --csv --exclude Longitude,Latitude,Location,ID
 ```
 
 This command would produce output that

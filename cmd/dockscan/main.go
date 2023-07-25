@@ -55,12 +55,18 @@ func main() {
 		Short: "Retrieve and display Citibike dock station status with timestamps in JSONL format.",
 		Long:  "The 'ts' command retrieves and displays the current status of Citibike dock stations with timestamps in JSON Lines (JSONL) format.",
 		RunE:  runTs,
+		PersistentPreRunE: func(cmd *cobra.Command, args []string) error {
+			if cmd.Flags().Changed("exclude") && !cmd.Flags().Changed("csv") {
+				return fmt.Errorf("--exclude requires --csv")
+			}
+			return nil
+		},
 	}
 
 	cmdTs.Flags().StringSliceVar(&ids, "id", []string{}, "Filter dock station status by IDs")
 	cmdTs.Flags().IntVar(&interval, "interval", 60, "Set the time interval (in seconds) between fetching station status updates")
 	cmdTs.Flags().BoolVar(&csv, "csv", false, "Output station status in CSV format")
-	cmdTs.Flags().StringSliceVar(&exclude, "exclude", []string{}, "Exclude specific columns from the CSV output")
+	cmdTs.Flags().StringSliceVar(&exclude, "exclude", []string{}, "Exclude columns from the CSV output")
 
 	rootCmd.AddCommand(cmdTs)
 

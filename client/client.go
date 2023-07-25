@@ -199,7 +199,7 @@ func (c *Client) PrintStationDataJSONL() {
 func (c *Client) PrintStationDataCSV(excludeColumns []string) {
 	w := csv.NewWriter(os.Stdout)
 	headers := []string{
-		"StationID",
+		"ID",
 		"Name",
 		"Longitude",
 		"Latitude",
@@ -234,7 +234,7 @@ func (c *Client) PrintStationDataCSV(excludeColumns []string) {
 
 		for _, data := range stationData {
 			var record []string
-			if !contains(excludeColumns, "StationID") {
+			if !contains(excludeColumns, "ID") {
 				record = append(record, data.Station.ID)
 			}
 			if !contains(excludeColumns, "Name") {
