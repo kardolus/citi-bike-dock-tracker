@@ -131,6 +131,8 @@ plt.title('Average Percentage of Available Docks per Hour')
 plt.show()
 ```
 
+Or open the [notebook file](red_hook_ts.ipynb) with Jupyter Notebook. 
+
 ### Expected Output
 
 <p align="center">
