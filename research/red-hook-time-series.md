@@ -28,7 +28,7 @@ For my analysis I first had to manually create a table of stations located in Re
 
 ## Station Info
 
-To take a quick peak at the current state of the Citi Bike docks in Red Hook you can run the following command: 
+To take a quick peak at the current state of the Citi Bike docks in Red Hook you can run the following command:
 
 ```shell
 ./bin/dockscan info \
@@ -97,6 +97,11 @@ Break down of the command:
 
 ## Plot a graph
 
+I recommend opening [this notebook file](red_hook_ts.ipynb) with Jupyter Notebook. This file contains a collection of
+example charts.
+
+However, you can also make a chart with raw python as follows:
+
 [You can grab a CSV with data from July 25th 2023 here](2023-07-25.csv). For a graph with the average percentage of
 available docks you can use:
 
@@ -130,8 +135,6 @@ plt.ylabel('Average Percentage of Available Docks')
 plt.title('Average Percentage of Available Docks per Hour')
 plt.show()
 ```
-
-Or open the [notebook file](red_hook_ts.ipynb) with Jupyter Notebook. 
 
 ### Expected Output
 
