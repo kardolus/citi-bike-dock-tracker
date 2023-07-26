@@ -141,3 +141,30 @@ plt.show()
 <p align="center">
   <img src="../resources/docks.png">
 </p>
+
+### Fun Visualization
+Here's a fun map you can make with this data: https://www.batchgeo.com/map/b61973906c476582e65f6a6ec6947214
+
+Used this CSV to produce it:
+```text
+Location,Label,Category
+Clinton St & Centre St Brooklyn NY 11231,Avg Available Docks: 0.329749,Less than 2
+Dwight St & Van Dyke St Brooklyn NY 11231,Avg Available Docks: 1.010753,Less than 2
+Wolcott St & Dwight St Brooklyn NY 11231,Avg Available Docks: 1.354839,Less than 2
+Henry St & W 9 St Brooklyn NY 11231,Avg Available Docks: 1.401434,Less than 2
+Sigourney St & Columbia St Brooklyn NY 11231,Avg Available Docks: 1.448029,Less than 2
+Columbia St & W 9 St Brooklyn NY 11231,Avg Available Docks: 2.372760,2 to 7
+Carroll St & Columbia St Brooklyn NY 11231,Avg Available Docks: 2.526882,2 to 7
+Columbia St & Degraw St Brooklyn NY 11231,Avg Available Docks: 2.806452,2 to 7
+Pioneer St & Van Brunt St Brooklyn NY 11231,Avg Available Docks: 3.060932,2 to 7
+Henry St & Bay St Brooklyn NY 11231,Avg Available Docks: 3.222222,2 to 7
+Bay St & Court St Brooklyn NY 11231,Avg Available Docks: 3.487455,2 to 7
+Commerce St & Van Brunt St Brooklyn NY 11231,Avg Available Docks: 3.673835,2 to 7
+Van Brunt St & Wolcott St Brooklyn NY 11231,Avg Available Docks: 4.408602,2 to 7
+Van Brunt St & Van Dyke St Brooklyn NY 11231,Avg Available Docks: 4.770609,2 to 7
+Coffey St & Conover St Brooklyn NY 11231,Avg Available Docks: 7.526882,More than 7
+Richards St & Delavan St Brooklyn NY 11231,Avg Available Docks: 8.028674,More than 7
+Pioneer St & Richards St Brooklyn NY 11231,Avg Available Docks: 12.028674,More than 7
+Coffey St & Ferris St Brooklyn NY 11231,Avg Available Docks: 16.175627,More than 7
+Columbia St & Lorraine St Brooklyn NY 11231,Avg Available Docks: 19.028674,More than 7
+```
