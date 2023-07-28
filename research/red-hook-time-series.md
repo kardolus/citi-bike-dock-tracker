@@ -98,7 +98,17 @@ Break down of the command:
 ## Plot a graph
 
 I recommend opening [this notebook file](red_hook_ts.ipynb) with Jupyter Notebook. This file contains a collection of
-example charts.
+example charts. You can export all the graphs to an HTML using 
+
+```shell
+jupyter nbconvert --no-input --to html notebook.ipynb
+```
+
+You can also convert that HTML to an image:
+
+```shell
+wkhtmltoimage --format png scratch.html scratch.png
+```
 
 However, you can also make a chart with raw python as follows:
 
