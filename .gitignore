@@ -3,4 +3,3 @@
 .ipynb_checkpoints
 bin/*
 scripts/env.sh
-scratch.ipynb
