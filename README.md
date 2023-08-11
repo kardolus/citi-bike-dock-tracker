@@ -1,5 +1,7 @@
 # Citi Bike Dock Tracker
 
+_NEW [Research on data collected using this repo](https://github.com/kardolus/opendata)_
+
 ## Table of Contents
 
 1. [Introduction](#introduction)
