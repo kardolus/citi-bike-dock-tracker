@@ -1,7 +1,5 @@
 # Citi Bike Dock Tracker
 
-_New: [Time Series Analysis of Dock Data in Red Hook, Brooklyn](research/red-hook-time-series.md)_
-
 ## Table of Contents
 
 1. [Introduction](#introduction)
