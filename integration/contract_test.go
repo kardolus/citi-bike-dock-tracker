@@ -40,10 +40,8 @@ func testContract(t *testing.T, when spec.G, it spec.S) {
 
 			station := data.Data.Stations[0]
 
-			Expect(station.LegacyID).ShouldNot(BeEmpty(), "Expected LegacyID to be present in the response")
 			Expect(station.NumScootersUnavailable).Should(BeNumerically(">=", 0), "Expected NumScootersUnavailable to be present and greater or equal to zero in the response")
 			Expect(station.LastReported).Should(BeNumerically(">", 0), "Expected LastReported to be present and greater than zero in the response")
-			Expect(station.StationStatus).ShouldNot(BeEmpty(), "Expected StationStatus to be present in the response")
 			Expect(station.IsReturning).Should(BeNumerically(">=", 0), "Expected IsReturning to be present and greater or equal to zero in the response")
 			Expect(station.StationID).ShouldNot(BeEmpty(), "Expected StationID to be present in the response")
 			Expect(station.NumEbikesAvailable).Should(BeNumerically(">=", 0), "Expected NumEbikesAvailable to be present and greater or equal to zero in the response")
@@ -76,7 +74,6 @@ func testContract(t *testing.T, when spec.G, it spec.S) {
 			Expect(station.ExternalID).ShouldNot(BeEmpty(), "Expected ExternalID to be present in the response")
 			Expect(station.Lat).Should(BeNumerically(">=", -90), "Expected Lat to be present and within range -90.0 to 90.0 in the response")
 			Expect(station.Lat).Should(BeNumerically("<=", 90), "Expected Lat to be present and within range -90.0 to 90.0 in the response")
-			Expect(station.LegacyID).ShouldNot(BeEmpty(), "Expected LegacyID to be present in the response")
 			Expect(station.StationID).ShouldNot(BeEmpty(), "Expected StationID to be present in the response")
 			Expect(station.RentalUris.Ios).ShouldNot(BeEmpty(), "Expected RentalUris.Ios to be present in the response")
 			Expect(station.RentalUris.Android).ShouldNot(BeEmpty(), "Expected RentalUris.Android to be present in the response")

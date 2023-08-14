@@ -18,7 +18,6 @@ type NormalizedStation struct {
 	Longitude           float64 `json:"longitude"`
 	Latitude            float64 `json:"latitude"`
 	Location            string  `json:"location"`
-	Status              string  `json:"status"`
 	BikesAvailable      int     `json:"bikesAvailable"`
 	EBikesAvailable     int     `json:"eBikesAvailable"`
 	BikesDisabled       int     `json:"bikesDisabled"`

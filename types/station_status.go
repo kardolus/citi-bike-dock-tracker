@@ -9,10 +9,8 @@ type StationStatus struct {
 }
 
 type Station struct {
-	LegacyID               string `json:"legacy_id"`
 	NumScootersUnavailable int    `json:"num_scooters_unavailable,omitempty"`
 	LastReported           int    `json:"last_reported"`
-	StationStatus          string `json:"station_status"`
 	EightdHasAvailableKeys bool   `json:"eightd_has_available_keys"`
 	IsReturning            int    `json:"is_returning"`
 	StationID              string `json:"station_id"`

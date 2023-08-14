@@ -277,9 +277,6 @@ func (c *Client) PrintStationDataCSV(excludeColumns []string) {
 			if !contains(excludeColumns, "Location") {
 				record = append(record, data.Station.Location)
 			}
-			if !contains(excludeColumns, "Status") {
-				record = append(record, data.Station.Status)
-			}
 			if !contains(excludeColumns, "BikesAvailable") {
 				record = append(record, fmt.Sprint(data.Station.BikesAvailable))
 			}
@@ -378,7 +375,6 @@ func normalizeStationData(stationStatus types.Station, stationInfo types.Station
 	item.Longitude = stationInfo.Lon
 	item.Latitude = stationInfo.Lat
 	item.Location = fmt.Sprintf(GoogleMapsQuery, stationInfo.Lat, stationInfo.Lon)
-	item.Status = stationStatus.StationStatus
 	item.BikesAvailable = stationStatus.NumBikesAvailable
 	item.EBikesAvailable = stationStatus.NumEbikesAvailable
 	item.BikesDisabled = stationStatus.NumBikesDisabled

@@ -11,7 +11,6 @@ type StationInformation struct {
 type StationEntity struct {
 	ExternalID string  `json:"external_id"`
 	Lat        float64 `json:"lat"`
-	LegacyID   string  `json:"legacy_id"`
 	StationID  string  `json:"station_id"`
 	RentalUris struct {
 		Ios     string `json:"ios"`

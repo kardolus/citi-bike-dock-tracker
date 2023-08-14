@@ -144,7 +144,6 @@ func testClient(t *testing.T, when spec.G, it spec.S) {
 
 			location := fmt.Sprintf(client.GoogleMapsQuery, 40.6758329439129, -74.01472628116608)
 			Expect(result.Stations[3].Location).To(Equal(location))
-			Expect(result.Stations[3].Status).To(Equal("active"))
 			Expect(result.Stations[3].BikesAvailable).To(Equal(21))
 			Expect(result.Stations[3].EBikesAvailable).To(Equal(4))
 			Expect(result.Stations[3].BikesDisabled).To(Equal(3))
