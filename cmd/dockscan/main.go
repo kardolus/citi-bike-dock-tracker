@@ -30,8 +30,11 @@ var (
 
 // namedAreas maps a friendly name to a bounding box.
 var namedAreas = map[string]client.BBox{
-	// Red Hook + Columbia Waterfront, Brooklyn
-	"redhook": {MinLat: 40.668, MinLon: -74.020, MaxLat: 40.686, MaxLon: -73.997},
+	// Red Hook, Brooklyn — the envelope of the 19 hand-curated Red Hook stations
+	// (peninsula + the Columbia St corridor), padded slightly so new stations in
+	// the area are picked up. Excludes the Carroll Gardens / Gowanus stations to
+	// the NE (east of ~-74.000).
+	"redhook": {MinLat: 40.6704, MinLon: -74.018, MaxLat: 40.6869, MaxLon: -74.0003},
 }
 
 func main() {

@@ -23,7 +23,7 @@ spec:
     spec:
       containers:
         - name: dockscan
-          image: docker.io/library/citi-bike-dock-tracker:v1
+          image: docker.io/library/citi-bike-dock-tracker:v2
           imagePullPolicy: Never
           args: ["ts", "--area", "redhook", "--interval", "60", "--postgres", "--metrics-addr", ":2112"]
           ports:

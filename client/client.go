@@ -464,6 +464,10 @@ func (c *Client) IngestPostgres(dsn string) error {
 	}
 	defer db.Close()
 	db.SetMaxOpenConns(2)
+	// recycle connections so a Postgres restart doesn't wedge ingestion on a
+	// stale pooled conn (lib/pq won't otherwise evict broken conns for a while)
+	db.SetConnMaxLifetime(5 * time.Minute)
+	db.SetConnMaxIdleTime(5 * time.Minute)
 
 	if err := db.Ping(); err != nil {
 		return fmt.Errorf("ping postgres: %w", err)

@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"io"
 	"net/http"
+	"time"
 )
 
 const (
@@ -28,8 +29,9 @@ type RestCaller struct {
 var _ Caller = &RestCaller{}
 
 func New() *RestCaller {
+	// bounded timeout so a stuck GBFS connection can't hang the ingest loop
 	return &RestCaller{
-		client: &http.Client{},
+		client: &http.Client{Timeout: 15 * time.Second},
 	}
 }
 
