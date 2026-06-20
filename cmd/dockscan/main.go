@@ -4,21 +4,35 @@ import (
 	"encoding/json"
 	"fmt"
 	"github.com/kardolus/citi-bike-dock-tracker/client"
+	"github.com/kardolus/citi-bike-dock-tracker/metrics"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 	"os"
+	"strconv"
+	"strings"
+	_ "time/tzdata" // embed the tz database so LoadLocation works in distroless
 )
 
 var (
-	GitCommit  string
-	GitVersion string
-	ServiceURL string
-	ids        []string
-	exclude    []string
-	interval   int
-	csv        bool
-	output     string
+	GitCommit   string
+	GitVersion  string
+	ServiceURL  string
+	ids         []string
+	exclude     []string
+	interval    int
+	csv         bool
+	output      string
+	postgres    bool
+	area        string
+	bbox        string
+	metricsAddr string
 )
+
+// namedAreas maps a friendly name to a bounding box.
+var namedAreas = map[string]client.BBox{
+	// Red Hook + Columbia Waterfront, Brooklyn
+	"redhook": {MinLat: 40.668, MinLon: -74.020, MaxLat: 40.686, MaxLon: -73.997},
+}
 
 func main() {
 	var rootCmd = &cobra.Command{
@@ -72,6 +86,10 @@ func main() {
 	cmdTs.Flags().BoolVar(&csv, "csv", false, "Output station status in CSV format")
 	cmdTs.Flags().StringSliceVar(&exclude, "exclude", []string{}, "Exclude columns from the CSV output")
 	cmdTs.Flags().StringVar(&output, "output", "", "Directory to save the output")
+	cmdTs.Flags().BoolVar(&postgres, "postgres", false, "Write station status to Postgres (DSN from DATABASE_URL)")
+	cmdTs.Flags().StringVar(&area, "area", "", "Named area to track, e.g. redhook")
+	cmdTs.Flags().StringVar(&bbox, "bbox", "", "Bounding box filter: minLat,minLon,maxLat,maxLon")
+	cmdTs.Flags().StringVar(&metricsAddr, "metrics-addr", ":2112", "Address for the /metrics + /healthz server (empty to disable)")
 
 	rootCmd.AddCommand(cmdTs)
 
@@ -132,9 +150,25 @@ func runTs(cmd *cobra.Command, args []string) error {
 		builder = builder.WithOutputDirectory(output)
 	}
 
+	box, err := resolveBBox(area, bbox)
+	if err != nil {
+		return err
+	}
+	if box != nil {
+		builder = builder.WithBBox(*box)
+	}
+
 	c, err := builder.Build()
 	if err != nil {
 		return err
+	}
+
+	if metricsAddr != "" {
+		metrics.Serve(metricsAddr)
+	}
+
+	if postgres {
+		return c.IngestPostgres(os.Getenv("DATABASE_URL"))
 	}
 
 	if csv {
@@ -144,6 +178,33 @@ func runTs(cmd *cobra.Command, args []string) error {
 	}
 
 	return nil
+}
+
+// resolveBBox turns --area (named preset) or --bbox (raw coords) into a BBox.
+func resolveBBox(area, bbox string) (*client.BBox, error) {
+	if area != "" {
+		b, ok := namedAreas[strings.ToLower(area)]
+		if !ok {
+			return nil, fmt.Errorf("unknown --area %q", area)
+		}
+		return &b, nil
+	}
+	if bbox != "" {
+		parts := strings.Split(bbox, ",")
+		if len(parts) != 4 {
+			return nil, fmt.Errorf("--bbox must be minLat,minLon,maxLat,maxLon")
+		}
+		var f [4]float64
+		for i, p := range parts {
+			v, err := strconv.ParseFloat(strings.TrimSpace(p), 64)
+			if err != nil {
+				return nil, fmt.Errorf("--bbox parse error: %w", err)
+			}
+			f[i] = v
+		}
+		return &client.BBox{MinLat: f[0], MinLon: f[1], MaxLat: f[2], MaxLon: f[3]}, nil
+	}
+	return nil, nil
 }
 
 func runVersion(cmd *cobra.Command, args []string) error {

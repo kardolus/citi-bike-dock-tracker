@@ -1,0 +1,29 @@
+# No-selector Service + manual Endpoints for citibike-postgres, which runs in
+# host docker on forge (10.0.0.120:5434) — same stateless pattern as
+# bart-postgres / keycloak-postgres. In-cluster apps reach it at
+# citibike-postgres.citibike.svc.cluster.local:5432.
+apiVersion: v1
+kind: Service
+metadata:
+  name: citibike-postgres
+  namespace: citibike
+spec:
+  type: ClusterIP
+  ports:
+    - name: pg
+      port: 5432
+      targetPort: 5434
+      protocol: TCP
+---
+apiVersion: v1
+kind: Endpoints
+metadata:
+  name: citibike-postgres
+  namespace: citibike
+subsets:
+  - addresses:
+      - ip: 10.0.0.120
+    ports:
+      - name: pg
+        port: 5434
+        protocol: TCP

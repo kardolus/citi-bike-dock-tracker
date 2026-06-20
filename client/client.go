@@ -1,16 +1,30 @@
 package client
 
 import (
+	"database/sql"
 	"encoding/csv"
 	"encoding/json"
 	"errors"
 	"fmt"
 	"github.com/kardolus/citi-bike-dock-tracker/http"
+	"github.com/kardolus/citi-bike-dock-tracker/metrics"
 	"github.com/kardolus/citi-bike-dock-tracker/types"
+	"log"
 	"os"
 	"path/filepath"
 	"time"
+
+	_ "github.com/lib/pq"
 )
+
+// BBox is a geographic bounding box used to filter stations by location.
+type BBox struct {
+	MinLat, MinLon, MaxLat, MaxLon float64
+}
+
+func (b BBox) contains(lat, lon float64) bool {
+	return lat >= b.MinLat && lat <= b.MaxLat && lon >= b.MinLon && lon <= b.MaxLon
+}
 
 const (
 	DefaultInterval        = 60 // in seconds
@@ -52,6 +66,7 @@ type ClientBuilder struct {
 	interval        int
 	serviceURL      string
 	filteredIDs     map[string]bool
+	bbox            *BBox
 	outputDirectory string
 }
 
@@ -77,6 +92,12 @@ func (b *ClientBuilder) WithIDFilter(ids []string) *ClientBuilder {
 	for _, id := range ids {
 		b.filteredIDs[id] = true
 	}
+	return b
+}
+
+// WithBBox restricts stations to those within a geographic bounding box
+func (b *ClientBuilder) WithBBox(box BBox) *ClientBuilder {
+	b.bbox = &box
 	return b
 }
 
@@ -112,13 +133,16 @@ func (b *ClientBuilder) Build() (*Client, error) {
 	}
 
 	for _, station := range stationInfo.Data.Stations {
+		// include unless an ID filter or bbox excludes it (both applied when set)
 		if len(b.filteredIDs) > 0 {
-			if _, ok := b.filteredIDs[station.StationID]; ok {
-				b.stationMap[station.StationID] = station
+			if _, ok := b.filteredIDs[station.StationID]; !ok {
+				continue
 			}
-		} else {
-			b.stationMap[station.StationID] = station
 		}
+		if b.bbox != nil && !b.bbox.contains(station.Lat, station.Lon) {
+			continue
+		}
+		b.stationMap[station.StationID] = station
 	}
 
 	return &Client{
@@ -403,4 +427,100 @@ func processResponse(raw []byte, v interface{}) error {
 
 func startOfDay(t time.Time) time.Time {
 	return time.Date(t.Year(), t.Month(), t.Day(), 0, 0, 0, 0, t.Location())
+}
+
+const createDockStatusTable = `
+CREATE TABLE IF NOT EXISTS dock_status (
+    station_id           text        NOT NULL,
+    name                 text        NOT NULL,
+    longitude            double precision,
+    latitude             double precision,
+    bikes_available      integer,
+    ebikes_available     integer,
+    bikes_disabled       integer,
+    docks_available      integer,
+    docks_disabled       integer,
+    scooters_available   integer,
+    scooters_unavailable integer,
+    is_returning         boolean,
+    is_renting           boolean,
+    is_installed         boolean,
+    ts                   timestamptz NOT NULL
+);
+CREATE INDEX IF NOT EXISTS dock_status_station_ts_idx ON dock_status (station_id, ts);
+CREATE INDEX IF NOT EXISTS dock_status_ts_idx ON dock_status (ts);
+`
+
+// IngestPostgres runs the polling loop, writing each tracked station's status to
+// the dock_status table on every interval. It creates the table if missing and
+// runs indefinitely. Health is surfaced via the metrics package.
+func (c *Client) IngestPostgres(dsn string) error {
+	if dsn == "" {
+		return errors.New("postgres DSN is empty (set DATABASE_URL)")
+	}
+	db, err := sql.Open("postgres", dsn)
+	if err != nil {
+		return fmt.Errorf("open postgres: %w", err)
+	}
+	defer db.Close()
+	db.SetMaxOpenConns(2)
+
+	if err := db.Ping(); err != nil {
+		return fmt.Errorf("ping postgres: %w", err)
+	}
+	if _, err := db.Exec(createDockStatusTable); err != nil {
+		return fmt.Errorf("ensure schema: %w", err)
+	}
+	log.Printf("ingesting to postgres every %ds (%d stations tracked)", c.interval, len(c.stationMap))
+
+	for {
+		metrics.IncPolls()
+		stationData, err := c.gatherStationData()
+		if err != nil {
+			metrics.IncFetchError()
+			log.Printf("fetch error: %v", err)
+			time.Sleep(time.Duration(c.interval) * time.Second)
+			continue
+		}
+		if err := c.insertBatch(db, stationData); err != nil {
+			metrics.IncDBError()
+			log.Printf("db write error: %v", err)
+		} else {
+			metrics.AddRows(len(stationData))
+			metrics.SetStations(len(stationData))
+			metrics.MarkSuccess(c.timeProvider.Now())
+		}
+		time.Sleep(time.Duration(c.interval) * time.Second)
+	}
+}
+
+func (c *Client) insertBatch(db *sql.DB, data []types.NormalizedStationDataTS) error {
+	if len(data) == 0 {
+		return nil
+	}
+	tx, err := db.Begin()
+	if err != nil {
+		return err
+	}
+	stmt, err := tx.Prepare(`INSERT INTO dock_status
+        (station_id,name,longitude,latitude,bikes_available,ebikes_available,bikes_disabled,
+         docks_available,docks_disabled,scooters_available,scooters_unavailable,
+         is_returning,is_renting,is_installed,ts)
+        VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15)`)
+	if err != nil {
+		_ = tx.Rollback()
+		return err
+	}
+	defer stmt.Close()
+	for _, d := range data {
+		s := d.Station
+		if _, err := stmt.Exec(s.ID, s.Name, s.Longitude, s.Latitude, s.BikesAvailable,
+			s.EBikesAvailable, s.BikesDisabled, s.DocksAvailable, s.DocksDisabled,
+			s.ScootersAvailable, s.ScootersUnavailable, s.IsReturning, s.IsRenting,
+			s.IsInstalled, d.TimeStamp); err != nil {
+			_ = tx.Rollback()
+			return err
+		}
+	}
+	return tx.Commit()
 }

@@ -1,0 +1,56 @@
+# dockscan — continuously ingests Red Hook Citi Bike dock status into Postgres.
+#
+# Prereqs:
+#   kubectl -n citibike create secret generic citibike-db \
+#       --from-literal=DATABASE_URL='postgres://citibike:<pw>@citibike-postgres.citibike.svc.cluster.local:5432/citibike?sslmode=disable'
+#   # build + side-load the image into the k8s containerd:
+#   docker build -t citi-bike-dock-tracker:v1 .
+#   docker save citi-bike-dock-tracker:v1 | sudo ctr -a /run/k8s-containerd/containerd.sock -n k8s.io images import -
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: dockscan
+  namespace: citibike
+  labels: {app: dockscan}
+spec:
+  replicas: 1
+  selector:
+    matchLabels: {app: dockscan}
+  template:
+    metadata:
+      labels: {app: dockscan}
+    spec:
+      containers:
+        - name: dockscan
+          image: docker.io/library/citi-bike-dock-tracker:v1
+          imagePullPolicy: Never
+          args: ["ts", "--area", "redhook", "--interval", "60", "--postgres", "--metrics-addr", ":2112"]
+          ports:
+            - {containerPort: 2112, name: metrics}
+          env:
+            - name: DATABASE_URL
+              valueFrom:
+                secretKeyRef: {name: citibike-db, key: DATABASE_URL}
+          readinessProbe:
+            httpGet: {path: /ready, port: 2112}
+            initialDelaySeconds: 10
+            periodSeconds: 15
+          livenessProbe:
+            httpGet: {path: /healthz, port: 2112}
+            initialDelaySeconds: 10
+            periodSeconds: 20
+          resources:
+            requests: {cpu: 25m, memory: 32Mi}
+            limits: {memory: 128Mi}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: dockscan
+  namespace: citibike
+  labels: {app: dockscan}
+spec:
+  selector: {app: dockscan}
+  ports:
+    - {name: metrics, port: 2112, targetPort: 2112}
