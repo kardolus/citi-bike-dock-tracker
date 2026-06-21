@@ -1,11 +1,13 @@
-# dockscan — continuously ingests Red Hook Citi Bike dock status into Postgres.
+# dockscan — continuously ingests curated Brooklyn Citi Bike dock status into Postgres.
+# Tracks the curated multi-neighborhood set (Red Hook + Brooklyn neighbors); see
+# client/neighborhoods.json. Each row is tagged with its neighborhood.
 #
 # Prereqs:
 #   kubectl -n citibike create secret generic citibike-db \
 #       --from-literal=DATABASE_URL='postgres://citibike:<pw>@citibike-postgres.citibike.svc.cluster.local:5432/citibike?sslmode=disable'
 #   # build + side-load the image into the k8s containerd:
-#   docker build -t citi-bike-dock-tracker:v1 .
-#   docker save citi-bike-dock-tracker:v1 | sudo ctr -a /run/k8s-containerd/containerd.sock -n k8s.io images import -
+#   docker build -t citi-bike-dock-tracker:v3 .
+#   docker save citi-bike-dock-tracker:v3 | sudo ctr -a /run/k8s-containerd/containerd.sock -n k8s.io images import -
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -23,9 +25,9 @@ spec:
     spec:
       containers:
         - name: dockscan
-          image: docker.io/library/citi-bike-dock-tracker:v2
+          image: docker.io/library/citi-bike-dock-tracker:v3
           imagePullPolicy: Never
-          args: ["ts", "--area", "redhook", "--interval", "60", "--postgres", "--metrics-addr", ":2112"]
+          args: ["ts", "--area", "bk-curated", "--interval", "60", "--postgres", "--metrics-addr", ":2112"]
           ports:
             - {containerPort: 2112, name: metrics}
           env:

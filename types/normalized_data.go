@@ -28,4 +28,5 @@ type NormalizedStation struct {
 	IsReturning         bool    `json:"isReturning"`
 	IsRenting           bool    `json:"isRenting"`
 	IsInstalled         bool    `json:"isInstalled"`
+	Neighborhood        string  `json:"neighborhood,omitempty"`
 }

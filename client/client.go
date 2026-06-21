@@ -52,6 +52,7 @@ var _ TimeProvider = &RealTime{}
 type Client struct {
 	caller          http.Caller
 	stationMap      map[string]types.StationEntity
+	neighborhood    map[string]string // station_id -> neighborhood slug (empty when not in neighborhood mode)
 	timeProvider    TimeProvider
 	interval        int
 	serviceURL      string
@@ -67,6 +68,7 @@ type ClientBuilder struct {
 	serviceURL      string
 	filteredIDs     map[string]bool
 	bbox            *BBox
+	neighborhoods   []Neighborhood
 	outputDirectory string
 }
 
@@ -101,6 +103,14 @@ func (b *ClientBuilder) WithBBox(box BBox) *ClientBuilder {
 	return b
 }
 
+// WithNeighborhoods restricts stations to those inside one of the curated
+// neighborhood polygons and tags each with its neighborhood slug. Stations
+// outside every polygon are dropped.
+func (b *ClientBuilder) WithNeighborhoods(ns []Neighborhood) *ClientBuilder {
+	b.neighborhoods = ns
+	return b
+}
+
 // WithInterval overwrites the default interval
 func (b *ClientBuilder) WithInterval(interval int) *ClientBuilder {
 	b.interval = interval
@@ -132,8 +142,9 @@ func (b *ClientBuilder) Build() (*Client, error) {
 		return nil, err
 	}
 
+	neighborhood := make(map[string]string)
 	for _, station := range stationInfo.Data.Stations {
-		// include unless an ID filter or bbox excludes it (both applied when set)
+		// include unless an ID filter, bbox, or neighborhood set excludes it
 		if len(b.filteredIDs) > 0 {
 			if _, ok := b.filteredIDs[station.StationID]; !ok {
 				continue
@@ -142,12 +153,20 @@ func (b *ClientBuilder) Build() (*Client, error) {
 		if b.bbox != nil && !b.bbox.contains(station.Lat, station.Lon) {
 			continue
 		}
+		if len(b.neighborhoods) > 0 {
+			slug := assignNeighborhood(b.neighborhoods, station.Lat, station.Lon)
+			if slug == "" {
+				continue // not in any curated neighborhood
+			}
+			neighborhood[station.StationID] = slug
+		}
 		b.stationMap[station.StationID] = station
 	}
 
 	return &Client{
 		caller:          b.caller,
 		stationMap:      b.stationMap,
+		neighborhood:    neighborhood,
 		interval:        b.interval,
 		timeProvider:    b.timeProvider,
 		serviceURL:      b.serviceURL,
@@ -190,6 +209,7 @@ func (c *Client) ParseStationData() (types.NormalizedStationData, error) {
 	for _, stationStatus := range statusData.Data.Stations {
 		if stationInfo, ok := c.stationMap[stationStatus.StationID]; ok {
 			item := normalizeStationData(stationStatus, stationInfo)
+			item.Neighborhood = c.neighborhood[stationStatus.StationID]
 			result.Stations = append(result.Stations, item)
 		}
 	}
@@ -359,6 +379,7 @@ func (c *Client) gatherStationData() ([]types.NormalizedStationDataTS, error) {
 	for _, stationStatus := range statusData.Data.Stations {
 		if stationInfo, ok := c.stationMap[stationStatus.StationID]; ok {
 			item := normalizeStationData(stationStatus, stationInfo)
+			item.Neighborhood = c.neighborhood[stationStatus.StationID]
 			data := types.NormalizedStationDataTS{
 				Station:   item,
 				TimeStamp: now,
@@ -445,10 +466,14 @@ CREATE TABLE IF NOT EXISTS dock_status (
     is_returning         boolean,
     is_renting           boolean,
     is_installed         boolean,
+    neighborhood         text,
     ts                   timestamptz NOT NULL
 );
+-- self-migrate older tables that predate the neighborhood column
+ALTER TABLE dock_status ADD COLUMN IF NOT EXISTS neighborhood text;
 CREATE INDEX IF NOT EXISTS dock_status_station_ts_idx ON dock_status (station_id, ts);
 CREATE INDEX IF NOT EXISTS dock_status_ts_idx ON dock_status (ts);
+CREATE INDEX IF NOT EXISTS dock_status_nbhd_ts_idx ON dock_status (neighborhood, ts);
 `
 
 // IngestPostgres runs the polling loop, writing each tracked station's status to
@@ -498,6 +523,15 @@ func (c *Client) IngestPostgres(dsn string) error {
 	}
 }
 
+// nullable maps an empty string to a SQL NULL (used for neighborhood when not
+// in neighborhood mode).
+func nullable(s string) interface{} {
+	if s == "" {
+		return nil
+	}
+	return s
+}
+
 func (c *Client) insertBatch(db *sql.DB, data []types.NormalizedStationDataTS) error {
 	if len(data) == 0 {
 		return nil
@@ -509,8 +543,8 @@ func (c *Client) insertBatch(db *sql.DB, data []types.NormalizedStationDataTS) e
 	stmt, err := tx.Prepare(`INSERT INTO dock_status
         (station_id,name,longitude,latitude,bikes_available,ebikes_available,bikes_disabled,
          docks_available,docks_disabled,scooters_available,scooters_unavailable,
-         is_returning,is_renting,is_installed,ts)
-        VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15)`)
+         is_returning,is_renting,is_installed,neighborhood,ts)
+        VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15,$16)`)
 	if err != nil {
 		_ = tx.Rollback()
 		return err
@@ -521,7 +555,7 @@ func (c *Client) insertBatch(db *sql.DB, data []types.NormalizedStationDataTS) e
 		if _, err := stmt.Exec(s.ID, s.Name, s.Longitude, s.Latitude, s.BikesAvailable,
 			s.EBikesAvailable, s.BikesDisabled, s.DocksAvailable, s.DocksDisabled,
 			s.ScootersAvailable, s.ScootersUnavailable, s.IsReturning, s.IsRenting,
-			s.IsInstalled, d.TimeStamp); err != nil {
+			s.IsInstalled, nullable(s.Neighborhood), d.TimeStamp); err != nil {
 			_ = tx.Rollback()
 			return err
 		}

@@ -28,6 +28,10 @@ var (
 	metricsAddr string
 )
 
+// curatedArea is the special --area value that enables the curated
+// multi-neighborhood set (see client/neighborhoods.json) instead of a bbox.
+const curatedArea = "bk-curated"
+
 // namedAreas maps a friendly name to a bounding box.
 var namedAreas = map[string]client.BBox{
 	// Red Hook, Brooklyn — the envelope of the 19 hand-curated Red Hook stations
@@ -90,7 +94,7 @@ func main() {
 	cmdTs.Flags().StringSliceVar(&exclude, "exclude", []string{}, "Exclude columns from the CSV output")
 	cmdTs.Flags().StringVar(&output, "output", "", "Directory to save the output")
 	cmdTs.Flags().BoolVar(&postgres, "postgres", false, "Write station status to Postgres (DSN from DATABASE_URL)")
-	cmdTs.Flags().StringVar(&area, "area", "", "Named area to track, e.g. redhook")
+	cmdTs.Flags().StringVar(&area, "area", "", "Named area to track: 'redhook' (bbox) or 'bk-curated' (multi-neighborhood)")
 	cmdTs.Flags().StringVar(&bbox, "bbox", "", "Bounding box filter: minLat,minLon,maxLat,maxLon")
 	cmdTs.Flags().StringVar(&metricsAddr, "metrics-addr", ":2112", "Address for the /metrics + /healthz server (empty to disable)")
 
@@ -153,12 +157,22 @@ func runTs(cmd *cobra.Command, args []string) error {
 		builder = builder.WithOutputDirectory(output)
 	}
 
-	box, err := resolveBBox(area, bbox)
-	if err != nil {
-		return err
-	}
-	if box != nil {
-		builder = builder.WithBBox(*box)
+	// "bk-curated" switches to the curated multi-neighborhood set (polygon
+	// assignment + per-station neighborhood tagging) instead of a single bbox.
+	if strings.ToLower(area) == curatedArea {
+		ns, err := client.LoadNeighborhoods()
+		if err != nil {
+			return err
+		}
+		builder = builder.WithNeighborhoods(ns)
+	} else {
+		box, err := resolveBBox(area, bbox)
+		if err != nil {
+			return err
+		}
+		if box != nil {
+			builder = builder.WithBBox(*box)
+		}
 	}
 
 	c, err := builder.Build()
