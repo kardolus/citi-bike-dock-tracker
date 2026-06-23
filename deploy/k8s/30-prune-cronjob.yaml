@@ -1,0 +1,42 @@
+# Nightly retention prune: dock_status is append-only (~799 rows/min ≈ 1.15M/day,
+# ~14 GB/month) and nothing deleted it before, so the table grew unbounded. The web
+# only queries the last 90 days (WINDOW), so anything older is dead weight. This trims
+# it nightly, capping the table at a ~90-day steady state (~40 GB). A BRIN index on
+# (ts) makes the range delete cheap. Runs at 03:40, after the nightly pg_dump backup.
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: dock-status-prune
+  namespace: citibike
+  labels: {app: dock-status-prune}
+spec:
+  schedule: "40 3 * * *"
+  concurrencyPolicy: Forbid
+  successfulJobsHistoryLimit: 3
+  failedJobsHistoryLimit: 3
+  jobTemplate:
+    spec:
+      backoffLimit: 2
+      activeDeadlineSeconds: 1800
+      template:
+        spec:
+          restartPolicy: OnFailure
+          containers:
+            - name: prune
+              image: postgres:16-alpine
+              imagePullPolicy: IfNotPresent
+              command: ["/bin/sh", "-c"]
+              args:
+                - |
+                  set -e
+                  echo "pruning dock_status rows older than 90 days..."
+                  psql "$DATABASE_URL" -v ON_ERROR_STOP=1 -c \
+                    "DELETE FROM dock_status WHERE ts < now() - interval '90 days';"
+                  echo "done."
+              env:
+                - name: DATABASE_URL
+                  valueFrom:
+                    secretKeyRef: {name: citibike-db, key: DATABASE_URL}
+              resources:
+                requests: {cpu: 25m, memory: 32Mi}
+                limits: {memory: 128Mi}
