@@ -25,9 +25,9 @@ spec:
     spec:
       containers:
         - name: dockscan
-          image: docker.io/library/citi-bike-dock-tracker:v3
+          image: docker.io/library/citi-bike-dock-tracker:v6
           imagePullPolicy: Never
-          args: ["ts", "--area", "bk-curated", "--interval", "60", "--postgres", "--metrics-addr", ":2112"]
+          args: ["ts", "--area", "bk-curated", "--interval", "180", "--postgres", "--metrics-addr", ":2112"]
           ports:
             - {containerPort: 2112, name: metrics}
           env:
