@@ -1,8 +1,13 @@
-# Nightly retention prune: dock_status is append-only (~799 rows/min ≈ 1.15M/day,
-# ~14 GB/month) and nothing deleted it before, so the table grew unbounded. The web
-# only queries the last 90 days (WINDOW), so anything older is dead weight. This trims
-# it nightly, capping the table at a ~90-day steady state (~40 GB). A BRIN index on
-# (ts) makes the range delete cheap. Runs at 03:40, after the nightly pg_dump backup.
+# Nightly retention prune for dock_status (append-only; ~799 rows / 3 min). The web
+# only queries the last 90 days (WINDOW), so older rows are dropped — but first they
+# are ARCHIVED to the forge cold drive (/mnt/cold/archive/dock_status) as gzipped CSV,
+# so the history is kept cheaply off-database instead of destroyed. Archive is
+# local-only (the external HDD) — not R2; it's bulk, low-stakes civic data.
+#
+# Fail-safe: the archive dir is a type:Directory hostPath, so if the cold drive is
+# unmounted the pod won't start and NOTHING is deleted (we never delete un-archived
+# rows). A single pinned cutoff is used for both the copy and the delete, so they
+# cover exactly the same set. Runs 03:40 (after the 03:00 pg_dump + 03:30 cold backup).
 apiVersion: batch/v1
 kind: CronJob
 metadata:
@@ -28,15 +33,43 @@ spec:
               command: ["/bin/sh", "-c"]
               args:
                 - |
-                  set -e
-                  echo "pruning dock_status rows older than 90 days..."
-                  psql "$DATABASE_URL" -v ON_ERROR_STOP=1 -c \
-                    "DELETE FROM dock_status WHERE ts < now() - interval '90 days';"
+                  set -eo pipefail
+                  ARCHDIR=/archive
+                  # One pinned cutoff (DB clock, epoch seconds — space-free) for both
+                  # the archive and the delete, so they cover exactly the same rows.
+                  CUTOFF=$(psql "$DATABASE_URL" -tAc \
+                    "SELECT extract(epoch FROM now() - interval '90 days')::bigint;")
+                  echo "cutoff(epoch) = $CUTOFF"
+                  N=$(psql "$DATABASE_URL" -tAc \
+                    "SELECT count(*) FROM dock_status WHERE ts < to_timestamp($CUTOFF);")
+                  echo "rows older than 90 days: $N"
+                  if [ "$N" -gt 0 ]; then
+                    OUT="$ARCHDIR/dock_status_$(date +%Y%m%d_%H%M%S).csv.gz"
+                    echo "archiving $N rows -> $OUT"
+                    psql "$DATABASE_URL" -v ON_ERROR_STOP=1 \
+                      -c "\copy (SELECT * FROM dock_status WHERE ts < to_timestamp($CUTOFF) ORDER BY ts) TO STDOUT WITH CSV HEADER" \
+                      | gzip > "$OUT"
+                    test -s "$OUT" || { echo "archive empty — aborting before delete"; exit 1; }
+                    echo "archived $(gzip -dc "$OUT" | wc -l) lines (incl header)"
+                  fi
+                  echo "deleting rows older than 90 days..."
+                  psql "$DATABASE_URL" -v ON_ERROR_STOP=1 \
+                    -c "DELETE FROM dock_status WHERE ts < to_timestamp($CUTOFF);"
                   echo "done."
               env:
                 - name: DATABASE_URL
                   valueFrom:
                     secretKeyRef: {name: citibike-db, key: DATABASE_URL}
+              volumeMounts:
+                - name: cold-archive
+                  mountPath: /archive
               resources:
                 requests: {cpu: 25m, memory: 32Mi}
                 limits: {memory: 128Mi}
+          volumes:
+            # type:Directory → if the cold drive is unmounted the path is absent and
+            # the pod fails to start, so the prune never deletes un-archived rows.
+            - name: cold-archive
+              hostPath:
+                path: /mnt/cold/archive/dock_status
+                type: Directory
