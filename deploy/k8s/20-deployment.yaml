@@ -5,9 +5,10 @@
 # Prereqs:
 #   kubectl -n citibike create secret generic citibike-db \
 #       --from-literal=DATABASE_URL='postgres://citibike:<pw>@citibike-postgres.citibike.svc.cluster.local:5432/citibike?sslmode=disable'
-#   # build + side-load the image into the k8s containerd:
-#   docker build -t citi-bike-dock-tracker:v3 .
-#   docker save citi-bike-dock-tracker:v3 | sudo ctr -a /run/k8s-containerd/containerd.sock -n k8s.io images import -
+#   # build + push to GHCR (forge has no passwordless sudo for ctr-import; the cluster
+#   # pulls via the ghcr-pull imagePullSecret, same as citibike-web):
+#   docker build -t ghcr.io/kardolus/citi-bike-dock-tracker:vN . && docker push ghcr.io/kardolus/citi-bike-dock-tracker:vN
+#   kubectl -n citibike set image deploy/dockscan dockscan=ghcr.io/kardolus/citi-bike-dock-tracker:vN
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -23,10 +24,12 @@ spec:
     metadata:
       labels: {app: dockscan}
     spec:
+      imagePullSecrets:
+        - name: ghcr-pull
       containers:
         - name: dockscan
-          image: docker.io/library/citi-bike-dock-tracker:v6
-          imagePullPolicy: Never
+          image: ghcr.io/kardolus/citi-bike-dock-tracker:v7
+          imagePullPolicy: IfNotPresent
           args: ["ts", "--area", "bk-curated", "--interval", "180", "--postgres", "--metrics-addr", ":2112"]
           ports:
             - {containerPort: 2112, name: metrics}
