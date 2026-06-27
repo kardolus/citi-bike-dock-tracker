@@ -471,9 +471,27 @@ CREATE TABLE IF NOT EXISTS dock_status (
 );
 -- self-migrate older tables that predate the neighborhood column
 ALTER TABLE dock_status ADD COLUMN IF NOT EXISTS neighborhood text;
-CREATE INDEX IF NOT EXISTS dock_status_station_ts_idx ON dock_status (station_id, ts);
-CREATE INDEX IF NOT EXISTS dock_status_ts_idx ON dock_status (ts);
-CREATE INDEX IF NOT EXISTS dock_status_nbhd_ts_idx ON dock_status (neighborhood, ts);
+-- Lean, TimescaleDB-friendly index set: one (station_id, ts DESC) backs both the
+-- "latest per station" Now query and the per-station LAG window scans; a partial
+-- (neighborhood, ts) backs the neighborhood filter (NULL = uncurated stations are
+-- excluded); a BRIN on ts gives cheap range/retention scans. The two older
+-- redundant indexes ((station_id, ts) ASC and a plain (ts) btree) are dropped.
+DROP INDEX IF EXISTS dock_status_station_ts_idx;
+DROP INDEX IF EXISTS dock_status_ts_idx;
+CREATE INDEX IF NOT EXISTS dock_status_station_ts_desc_idx ON dock_status (station_id, ts DESC);
+CREATE INDEX IF NOT EXISTS dock_status_nbhd_ts_idx ON dock_status (neighborhood, ts) WHERE neighborhood IS NOT NULL;
+CREATE INDEX IF NOT EXISTS idx_dock_status_ts_brin ON dock_status USING brin (ts);
+`
+
+// timescaleSetup converts dock_status to a compressed TimescaleDB hypertable. It
+// runs only when the timescaledb extension is available, is idempotent on an
+// already-converted DB, and is treated as non-fatal — on plain Postgres (or if
+// anything here fails) ingestion still proceeds, just uncompressed.
+const timescaleSetup = `
+CREATE EXTENSION IF NOT EXISTS timescaledb;
+SELECT create_hypertable('dock_status','ts', chunk_time_interval => INTERVAL '1 day', if_not_exists => true, migrate_data => true);
+ALTER TABLE dock_status SET (timescaledb.compress, timescaledb.compress_segmentby='station_id', timescaledb.compress_orderby='ts DESC');
+SELECT add_compression_policy('dock_status', INTERVAL '7 days', if_not_exists => true);
 `
 
 // IngestPostgres runs the polling loop, writing each tracked station's status to
@@ -499,6 +517,21 @@ func (c *Client) IngestPostgres(dsn string) error {
 	}
 	if _, err := db.Exec(createDockStatusTable); err != nil {
 		return fmt.Errorf("ensure schema: %w", err)
+	}
+	// If TimescaleDB is available, make dock_status a compressed hypertable.
+	// Non-fatal: plain Postgres (or any failure here) just means uncompressed rows.
+	var hasTimescale bool
+	if err := db.QueryRow(
+		"SELECT EXISTS(SELECT 1 FROM pg_available_extensions WHERE name = 'timescaledb')",
+	).Scan(&hasTimescale); err != nil {
+		log.Printf("timescaledb availability check failed (non-fatal): %v", err)
+	}
+	if hasTimescale {
+		if _, err := db.Exec(timescaleSetup); err != nil {
+			log.Printf("timescaledb setup failed (non-fatal, continuing uncompressed): %v", err)
+		} else {
+			log.Printf("timescaledb: dock_status is a compressed hypertable")
+		}
 	}
 	log.Printf("ingesting to postgres every %ds (%d stations tracked)", c.interval, len(c.stationMap))
 

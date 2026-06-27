@@ -52,9 +52,14 @@ spec:
                     test -s "$OUT" || { echo "archive empty — aborting before delete"; exit 1; }
                     echo "archived $(gzip -dc "$OUT" | wc -l) lines (incl header)"
                   fi
-                  echo "deleting rows older than 90 days..."
+                  # dock_status is a TimescaleDB hypertable → drop whole chunks older
+                  # than the cutoff instead of a per-row DELETE (instant; cheap on
+                  # compressed chunks). drop_chunks is chunk-granular, so it keeps a
+                  # partial chunk straddling the cutoff — those few already-archived
+                  # rows are simply re-archived next run (harmless for a cold copy).
+                  echo "dropping chunks older than 90 days..."
                   psql "$DATABASE_URL" -v ON_ERROR_STOP=1 \
-                    -c "DELETE FROM dock_status WHERE ts < to_timestamp($CUTOFF);"
+                    -c "SELECT drop_chunks('dock_status', older_than => to_timestamp($CUTOFF));"
                   echo "done."
               env:
                 - name: DATABASE_URL
