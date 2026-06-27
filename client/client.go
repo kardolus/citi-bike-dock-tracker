@@ -103,9 +103,10 @@ func (b *ClientBuilder) WithBBox(box BBox) *ClientBuilder {
 	return b
 }
 
-// WithNeighborhoods restricts stations to those inside one of the curated
-// neighborhood polygons and tags each with its neighborhood slug. Stations
-// outside every polygon are dropped.
+// WithNeighborhoods tags each station with its neighborhood slug (assigned once
+// at Build time, then memoized). The full city-wide set + the nearest-centroid
+// fallback in assignNeighborhood means every station in the service area gets a
+// neighborhood, so none are dropped.
 func (b *ClientBuilder) WithNeighborhoods(ns []Neighborhood) *ClientBuilder {
 	b.neighborhoods = ns
 	return b
