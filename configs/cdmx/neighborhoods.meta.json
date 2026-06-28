@@ -1,0 +1,522 @@
+[
+{
+"slug": "roma-norte",
+"display": "Roma Norte",
+"area": "ciudad-de-mexico",
+"centroid": [
+19.41853,
+-99.16261
+],
+"count": 37
+},
+{
+"slug": "cuauhtemoc",
+"display": "Cuauhtemoc",
+"area": "ciudad-de-mexico",
+"centroid": [
+19.42844,
+-99.1686
+],
+"count": 21
+},
+{
+"slug": "polanco",
+"display": "Polanco",
+"area": "ciudad-de-mexico",
+"centroid": [
+19.43298,
+-99.19583
+],
+"count": 40
+},
+{
+"slug": "juarez",
+"display": "Juarez",
+"area": "ciudad-de-mexico",
+"centroid": [
+19.42762,
+-99.16103
+],
+"count": 24
+},
+{
+"slug": "hipodromo",
+"display": "Hipodromo",
+"area": "ciudad-de-mexico",
+"centroid": [
+19.40919,
+-99.17146
+],
+"count": 20
+},
+{
+"slug": "centro",
+"display": "Centro",
+"area": "ciudad-de-mexico",
+"centroid": [
+19.43147,
+-99.13862
+],
+"count": 30
+},
+{
+"slug": "roma-sur",
+"display": "Roma Sur",
+"area": "ciudad-de-mexico",
+"centroid": [
+19.40709,
+-99.16311
+],
+"count": 15
+},
+{
+"slug": "condesa",
+"display": "Condesa",
+"area": "ciudad-de-mexico",
+"centroid": [
+19.41512,
+-99.17567
+],
+"count": 12
+},
+{
+"slug": "buenavista",
+"display": "Buenavista",
+"area": "ciudad-de-mexico",
+"centroid": [
+19.45037,
+-99.15665
+],
+"count": 26
+},
+{
+"slug": "escandon",
+"display": "Escandon",
+"area": "ciudad-de-mexico",
+"centroid": [
+19.40231,
+-99.17851
+],
+"count": 13
+},
+{
+"slug": "san-rafael",
+"display": "San Rafael",
+"area": "ciudad-de-mexico",
+"centroid": [
+19.44056,
+-99.16282
+],
+"count": 19
+},
+{
+"slug": "del-valle-sur",
+"display": "Del Valle Sur",
+"area": "ciudad-de-mexico",
+"centroid": [
+19.3715,
+-99.1703
+],
+"count": 19
+},
+{
+"slug": "del-valle-norte",
+"display": "Del Valle Norte",
+"area": "ciudad-de-mexico",
+"centroid": [
+19.39497,
+-99.1662
+],
+"count": 17
+},
+{
+"slug": "tabacalera",
+"display": "Tabacalera",
+"area": "ciudad-de-mexico",
+"centroid": [
+19.43552,
+-99.15413
+],
+"count": 6
+},
+{
+"slug": "narvarte-poniente",
+"display": "Narvarte Poniente",
+"area": "ciudad-de-mexico",
+"centroid": [
+19.39095,
+-99.15314
+],
+"count": 29
+},
+{
+"slug": "san-miguel-chapultepec",
+"display": "San Miguel Chapultepec",
+"area": "ciudad-de-mexico",
+"centroid": [
+19.41214,
+-99.18762
+],
+"count": 10
+},
+{
+"slug": "napoles",
+"display": "Napoles",
+"area": "ciudad-de-mexico",
+"centroid": [
+19.39355,
+-99.17576
+],
+"count": 13
+},
+{
+"slug": "del-valle-centro",
+"display": "Del Valle Centro",
+"area": "ciudad-de-mexico",
+"centroid": [
+19.38284,
+-99.1665
+],
+"count": 14
+},
+{
+"slug": "anzures",
+"display": "Anzures",
+"area": "ciudad-de-mexico",
+"centroid": [
+19.43068,
+-99.17841
+],
+"count": 9
+},
+{
+"slug": "hipodromo-condesa",
+"display": "Hipodromo Condesa",
+"area": "ciudad-de-mexico",
+"centroid": [
+19.40887,
+-99.17881
+],
+"count": 5
+},
+{
+"slug": "san-pedro-de-los-pinos",
+"display": "San Pedro De Los Pinos",
+"area": "ciudad-de-mexico",
+"centroid": [
+19.39075,
+-99.1839
+],
+"count": 9
+},
+{
+"slug": "granada",
+"display": "Granada",
+"area": "ciudad-de-mexico",
+"centroid": [
+19.43979,
+-99.19341
+],
+"count": 6
+},
+{
+"slug": "bosque-de-chapultepec-i",
+"display": "Bosque De Chapultepec I",
+"area": "ciudad-de-mexico",
+"centroid": [
+19.42502,
+-99.18542
+],
+"count": 3
+},
+{
+"slug": "insurgentes-mixcoac",
+"display": "Insurgentes Mixcoac",
+"area": "ciudad-de-mexico",
+"centroid": [
+19.37288,
+-99.18424
+],
+"count": 9
+},
+{
+"slug": "doctores",
+"display": "Doctores",
+"area": "ciudad-de-mexico",
+"centroid": [
+19.41617,
+-99.14392
+],
+"count": 33
+},
+{
+"slug": "tlacoquemecatl-del-valle",
+"display": "Tlacoquemecatl Del Valle",
+"area": "ciudad-de-mexico",
+"centroid": [
+19.37566,
+-99.17498
+],
+"count": 6
+},
+{
+"slug": "sta-cruz-atoyac",
+"display": "Sta Cruz Atoyac",
+"area": "ciudad-de-mexico",
+"centroid": [
+19.36663,
+-99.15946
+],
+"count": 7
+},
+{
+"slug": "anahuac",
+"display": "Anahuac",
+"area": "ciudad-de-mexico",
+"centroid": [
+19.45093,
+-99.17251
+],
+"count": 26
+},
+{
+"slug": "veronica-anzures",
+"display": "Veronica Anzures",
+"area": "ciudad-de-mexico",
+"centroid": [
+19.43674,
+-99.17378
+],
+"count": 7
+},
+{
+"slug": "ciudad-de-los-deportes",
+"display": "Ciudad De Los Deportes",
+"area": "ciudad-de-mexico",
+"centroid": [
+19.38305,
+-99.17965
+],
+"count": 5
+},
+{
+"slug": "ampliacion-napoles",
+"display": "Ampliacion Napoles",
+"area": "ciudad-de-mexico",
+"centroid": [
+19.38719,
+-99.17794
+],
+"count": 4
+},
+{
+"slug": "irrigacion",
+"display": "Irrigacion",
+"area": "ciudad-de-mexico",
+"centroid": [
+19.43994,
+-99.20727
+],
+"count": 4
+},
+{
+"slug": "general-anaya",
+"display": "General Anaya",
+"area": "ciudad-de-mexico",
+"centroid": [
+19.35065,
+-99.15378
+],
+"count": 30
+},
+{
+"slug": "lomas-de-chapultepec",
+"display": "Lomas De Chapultepec",
+"area": "ciudad-de-mexico",
+"centroid": [
+19.42722,
+-99.20717
+],
+"count": 6
+},
+{
+"slug": "piedad-narvarte",
+"display": "Piedad Narvarte",
+"area": "ciudad-de-mexico",
+"centroid": [
+19.40019,
+-99.14569
+],
+"count": 16
+},
+{
+"slug": "extremadura-insurgentes",
+"display": "Extremadura Insurgentes",
+"area": "ciudad-de-mexico",
+"centroid": [
+19.37918,
+-99.17956
+],
+"count": 2
+},
+{
+"slug": "actipan",
+"display": "Actipan",
+"area": "ciudad-de-mexico",
+"centroid": [
+19.36342,
+-99.18407
+],
+"count": 16
+},
+{
+"slug": "rincon-del-bosque",
+"display": "Rincon Del Bosque",
+"area": "ciudad-de-mexico",
+"centroid": [
+19.43058,
+-99.18177
+],
+"count": 2
+},
+{
+"slug": "acacias",
+"display": "Acacias",
+"area": "ciudad-de-mexico",
+"centroid": [
+19.357,
+-99.17875
+],
+"count": 18
+},
+{
+"slug": "nonoalco",
+"display": "Nonoalco",
+"area": "ciudad-de-mexico",
+"centroid": [
+19.38263,
+-99.18608
+],
+"count": 2
+},
+{
+"slug": "anahuac-los-manzanos",
+"display": "Anahuac Los Manzanos",
+"area": "ciudad-de-mexico",
+"centroid": [
+19.44213,
+-99.18443
+],
+"count": 1
+},
+{
+"slug": "granada-2",
+"display": "Granada",
+"area": "ciudad-de-mexico",
+"centroid": [
+19.44219,
+-99.20257
+],
+"count": 3
+},
+{
+"slug": "portales-norte",
+"display": "Portales Norte",
+"area": "ciudad-de-mexico",
+"centroid": [
+19.37003,
+-99.14708
+],
+"count": 24
+},
+{
+"slug": "xoco",
+"display": "Xoco",
+"area": "ciudad-de-mexico",
+"centroid": [
+19.35278,
+-99.16753
+],
+"count": 17
+},
+{
+"slug": "insurgentes-san-borja",
+"display": "Insurgentes San Borja",
+"area": "ciudad-de-mexico",
+"centroid": [
+19.38381,
+-99.17315
+],
+"count": 3
+},
+{
+"slug": "anahuac-mariano-escobedo",
+"display": "Anahuac Mariano Escobedo",
+"area": "ciudad-de-mexico",
+"centroid": [
+19.46088,
+-99.17858
+],
+"count": 24
+},
+{
+"slug": "noche-buena",
+"display": "Noche Buena",
+"area": "ciudad-de-mexico",
+"centroid": [
+19.38065,
+-99.17901
+],
+"count": 2
+},
+{
+"slug": "bosque-de-chapultepec-ii",
+"display": "Bosque De Chapultepec Ii",
+"area": "ciudad-de-mexico",
+"centroid": [
+19.42631,
+-99.2033
+],
+"count": 1
+},
+{
+"slug": "cuauhtemoc-pensil",
+"display": "Cuauhtemoc Pensil",
+"area": "ciudad-de-mexico",
+"centroid": [
+19.46135,
+-99.19018
+],
+"count": 4
+},
+{
+"slug": "letran-valle",
+"display": "Letran Valle",
+"area": "ciudad-de-mexico",
+"centroid": [
+19.3799,
+-99.15311
+],
+"count": 10
+},
+{
+"slug": "anahuac-dos-lagos",
+"display": "Anahuac Dos Lagos",
+"area": "ciudad-de-mexico",
+"centroid": [
+19.44269,
+-99.19083
+],
+"count": 1
+},
+{
+"slug": "residencial-emperadores",
+"display": "Residencial Emperadores",
+"area": "ciudad-de-mexico",
+"centroid": [
+19.36727,
+-99.15866
+],
+"count": 1
+}
+]
