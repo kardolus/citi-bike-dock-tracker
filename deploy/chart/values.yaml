@@ -24,7 +24,8 @@ neighborhoodLabel: Neighborhood
 description: ""
 umamiId: ""
 areaOverrides: "{}"      # JSON string
+retentionDays: 90        # drop dock_status chunks older than this (keeps each city bounded)
 
 images:
-  ingester: ghcr.io/kardolus/citi-bike-dock-tracker:v13
+  ingester: ghcr.io/kardolus/citi-bike-dock-tracker:v14
   web: ghcr.io/kardolus/citibike-web:v59

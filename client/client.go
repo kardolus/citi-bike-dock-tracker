@@ -12,6 +12,8 @@ import (
 	"log"
 	"os"
 	"path/filepath"
+	"strconv"
+	"strings"
 	"time"
 
 	_ "github.com/lib/pq"
@@ -596,6 +598,19 @@ func (c *Client) IngestPostgres(dsn string) error {
 			log.Printf("timescaledb setup failed (non-fatal, continuing uncompressed): %v", err)
 		} else {
 			log.Printf("timescaledb: dock_status is a compressed hypertable")
+		}
+		// Optional 90-day-style retention: drop chunks older than RETENTION_DAYS so the
+		// table stays bounded. Opt-in via env — NYC leaves it unset and instead uses its
+		// archive-to-cold-drive prune CronJob; the chart-deployed cities set it to 90.
+		if days := strings.TrimSpace(os.Getenv("RETENTION_DAYS")); days != "" {
+			if n, err := strconv.Atoi(days); err != nil || n <= 0 {
+				log.Printf("invalid RETENTION_DAYS=%q (want a positive integer); skipping retention policy", days)
+			} else if _, err := db.Exec(fmt.Sprintf(
+				"SELECT add_retention_policy('dock_status', INTERVAL '%d days', if_not_exists => true)", n)); err != nil {
+				log.Printf("retention policy setup failed (non-fatal): %v", err)
+			} else {
+				log.Printf("timescaledb: retention policy drops chunks older than %d days", n)
+			}
 		}
 	}
 	log.Printf("ingesting to postgres every %ds (%d stations tracked)", c.interval, len(c.stationMap))
