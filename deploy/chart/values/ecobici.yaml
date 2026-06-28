@@ -14,3 +14,6 @@ neighborhoodLabel: Colonia
 description: "Live Ecobici dock availability and 90-day patterns across central Mexico City."
 umamiId: 5e035066-0434-4789-8f1f-b7920a814e12
 areaOverrides: '{"ciudad-de-mexico":"Ciudad de México"}'
+# Ecobici closes overnight (05:00–00:30 local) — show a "closed" banner so the low
+# nighttime bike count reads as closed, not broken.
+serviceHours: "05:00-00:30"

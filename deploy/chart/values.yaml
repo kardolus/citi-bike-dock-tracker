@@ -25,7 +25,8 @@ description: ""
 umamiId: ""
 areaOverrides: "{}"      # JSON string
 retentionDays: 90        # drop dock_status chunks older than this (keeps each city bounded)
+serviceHours: ""         # "HH:MM-HH:MM" local if the system closes overnight (e.g. Ecobici); empty = 24/7
 
 images:
   ingester: ghcr.io/kardolus/citi-bike-dock-tracker:v14
-  web: ghcr.io/kardolus/citibike-web:v59
+  web: ghcr.io/kardolus/citibike-web:v60
