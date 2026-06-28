@@ -69,7 +69,7 @@ spec:
       imagePullSecrets: [{name: ghcr-pull}]
       containers:
         - name: ecobici-web
-          image: ghcr.io/kardolus/citibike-web:v55
+          image: ghcr.io/kardolus/citibike-web:v56
           imagePullPolicy: IfNotPresent
           ports: [{containerPort: 8000, name: http}]
           env:
