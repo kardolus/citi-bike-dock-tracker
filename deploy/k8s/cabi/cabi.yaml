@@ -78,7 +78,7 @@ spec:
       imagePullSecrets: [{name: ghcr-pull}]
       containers:
         - name: cabi-web
-          image: ghcr.io/kardolus/citibike-web:v54
+          image: ghcr.io/kardolus/citibike-web:v58
           imagePullPolicy: IfNotPresent
           ports: [{containerPort: 8000, name: http}]
           env:
@@ -87,6 +87,7 @@ spec:
             - {name: DOMAIN, value: cabi.kardol.us}
             - {name: CITY_TZ, value: America/New_York}
             - {name: HAS_EBIKES, value: "true"}
+            - {name: COLD_START_DAYS, value: "14"}
             - {name: NEIGHBORHOODS_META_PATH, value: /config/neighborhoods.meta.json}
             - {name: OG_IMAGE_PATH, value: /config/og.png}
             - {name: UMAMI_WEBSITE_ID, value: b1d35a01-31f1-465f-9549-d830d856a84c}

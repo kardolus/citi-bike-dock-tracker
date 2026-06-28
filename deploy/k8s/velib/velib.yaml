@@ -69,7 +69,7 @@ spec:
       imagePullSecrets: [{name: ghcr-pull}]
       containers:
         - name: velib-web
-          image: ghcr.io/kardolus/citibike-web:v54
+          image: ghcr.io/kardolus/citibike-web:v58
           imagePullPolicy: IfNotPresent
           ports: [{containerPort: 8000, name: http}]
           env:
@@ -78,6 +78,7 @@ spec:
             - {name: DOMAIN, value: velib.kardol.us}
             - {name: CITY_TZ, value: Europe/Paris}
             - {name: HAS_EBIKES, value: "true"}
+            - {name: COLD_START_DAYS, value: "14"}
             - {name: NEIGHBORHOODS_META_PATH, value: /config/neighborhoods.meta.json}
             - {name: OG_IMAGE_PATH, value: /config/og.png}
             - {name: UMAMI_WEBSITE_ID, value: d46d7d2d-e87c-475b-b8b0-15dbaab38757}

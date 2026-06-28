@@ -78,6 +78,7 @@ spec:
             - {name: DOMAIN, value: ecobici.kardol.us}
             - {name: CITY_TZ, value: America/Mexico_City}
             - {name: HAS_EBIKES, value: "false"}                  # feed exposes no e-bike count
+            - {name: COLD_START_DAYS, value: "14"}
             - {name: NEIGHBORHOOD_LABEL, value: Colonia}
             - {name: DEFAULT_SCOPE, value: all-ciudad-de-mexico}  # land on the colonia view
             - {name: NEIGHBORHOODS_META_PATH, value: /config/neighborhoods.meta.json}
