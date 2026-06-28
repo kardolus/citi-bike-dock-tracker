@@ -53,6 +53,7 @@ type Client struct {
 	caller          http.Caller
 	stationMap      map[string]types.StationEntity
 	neighborhood    map[string]string // station_id -> neighborhood slug (empty when not in neighborhood mode)
+	electricTypes   map[string]bool   // PBSC e-bike vehicle_type_ids (empty for every other operator)
 	timeProvider    TimeProvider
 	interval        int
 	serviceURL      string
@@ -69,6 +70,7 @@ type ClientBuilder struct {
 	serviceURL      string
 	statusURL       string // full station_status URL (per-city, e.g. Lyft /gbfs/2.3/dca-cabi/en/...)
 	infoURL         string // full station_information URL
+	vehicleTypesURL string // full vehicle_types.json URL (PBSC/Bicing e-bike classification)
 	filteredIDs     map[string]bool
 	bbox            *BBox
 	neighborhoods   []Neighborhood
@@ -144,6 +146,15 @@ func (b *ClientBuilder) WithFeedURLs(infoURL, statusURL string) *ClientBuilder {
 	return b
 }
 
+// WithVehicleTypesURL sets the GBFS vehicle_types.json URL. Only PBSC feeds (Bicing)
+// need it: they report the mechanical/e-bike split in station_status as opaque
+// vehicle_type_ids, and this file says which of those ids are e-bikes. Unset for
+// every other operator (Lyft/Smovengo carry the e-bike count inline).
+func (b *ClientBuilder) WithVehicleTypesURL(url string) *ClientBuilder {
+	b.vehicleTypesURL = url
+	return b
+}
+
 // WithTimeProvider overwrites the default time provider
 func (b *ClientBuilder) WithTimeProvider(provider TimeProvider) *ClientBuilder {
 	b.timeProvider = provider
@@ -155,6 +166,18 @@ func (b *ClientBuilder) Build() (*Client, error) {
 	stationInfo, err := b.getStationInformation()
 	if err != nil {
 		return nil, err
+	}
+
+	// PBSC e-bike classification (Bicing): fetch vehicle_types.json once at build.
+	// Non-fatal — on failure we just fall back to no e-bike split for that feed.
+	var electricTypes map[string]bool
+	if b.vehicleTypesURL != "" {
+		if vt, err := b.getVehicleTypes(); err != nil {
+			log.Printf("vehicle_types fetch failed (non-fatal, no e-bike split): %v", err)
+		} else {
+			electricTypes = vt.ElectricBicycleTypes()
+			log.Printf("vehicle_types: %d e-bike vehicle_type_ids", len(electricTypes))
+		}
 	}
 
 	neighborhood := make(map[string]string)
@@ -182,6 +205,7 @@ func (b *ClientBuilder) Build() (*Client, error) {
 		caller:          b.caller,
 		stationMap:      b.stationMap,
 		neighborhood:    neighborhood,
+		electricTypes:   electricTypes,
 		interval:        b.interval,
 		timeProvider:    b.timeProvider,
 		serviceURL:      b.serviceURL,
@@ -209,6 +233,18 @@ func (b *ClientBuilder) getStationInformation() (types.StationInformation, error
 	return response, nil
 }
 
+func (b *ClientBuilder) getVehicleTypes() (types.VehicleTypes, error) {
+	raw, err := b.caller.Get(b.vehicleTypesURL)
+	if err != nil {
+		return types.VehicleTypes{}, err
+	}
+	var response types.VehicleTypes
+	if err := processResponse(raw, &response); err != nil {
+		return types.VehicleTypes{}, err
+	}
+	return response, nil
+}
+
 // ParseStationData fetches station status information from the Citi Bike API and combines
 // it with pre-fetched station information to create a set of normalized data.
 //
@@ -228,7 +264,7 @@ func (c *Client) ParseStationData() (types.NormalizedStationData, error) {
 
 	for _, stationStatus := range statusData.Data.Stations {
 		if stationInfo, ok := c.stationMap[stationStatus.StationID]; ok {
-			item := normalizeStationData(stationStatus, stationInfo)
+			item := normalizeStationData(stationStatus, stationInfo, c.electricTypes)
 			item.Neighborhood = c.neighborhood[stationStatus.StationID]
 			result.Stations = append(result.Stations, item)
 		}
@@ -398,7 +434,7 @@ func (c *Client) gatherStationData() ([]types.NormalizedStationDataTS, error) {
 
 	for _, stationStatus := range statusData.Data.Stations {
 		if stationInfo, ok := c.stationMap[stationStatus.StationID]; ok {
-			item := normalizeStationData(stationStatus, stationInfo)
+			item := normalizeStationData(stationStatus, stationInfo, c.electricTypes)
 			item.Neighborhood = c.neighborhood[stationStatus.StationID]
 			data := types.NormalizedStationDataTS{
 				Station:   item,
@@ -436,7 +472,7 @@ func createNewWriter(currentDay time.Time, dir string) *csv.Writer {
 	return csv.NewWriter(file)
 }
 
-func normalizeStationData(stationStatus types.Station, stationInfo types.StationEntity) types.NormalizedStation {
+func normalizeStationData(stationStatus types.Station, stationInfo types.StationEntity, electricTypes map[string]bool) types.NormalizedStation {
 	var item types.NormalizedStation
 
 	item.ID = stationStatus.StationID
@@ -445,7 +481,7 @@ func normalizeStationData(stationStatus types.Station, stationInfo types.Station
 	item.Latitude = stationInfo.Lat
 	item.Location = fmt.Sprintf(GoogleMapsQuery, stationInfo.Lat, stationInfo.Lon)
 	item.BikesAvailable = stationStatus.NumBikesAvailable
-	item.EBikesAvailable = stationStatus.Ebikes()
+	item.EBikesAvailable = stationStatus.EbikesWith(electricTypes)
 	item.BikesDisabled = stationStatus.NumBikesDisabled
 	item.DocksAvailable = stationStatus.NumDocksAvailable
 	item.DocksDisabled = stationStatus.NumDocksDisabled

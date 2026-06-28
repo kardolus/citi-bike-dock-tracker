@@ -153,6 +153,11 @@ func runTs(cmd *cobra.Command, args []string) error {
 	if infoURL, statusURL := os.Getenv("GBFS_STATION_INFORMATION_URL"), os.Getenv("GBFS_STATION_STATUS_URL"); infoURL != "" || statusURL != "" {
 		builder = builder.WithFeedURLs(infoURL, statusURL)
 	}
+	// PBSC feeds (Bicing) need vehicle_types.json to know which vehicle_type_ids are
+	// e-bikes; every other operator carries the e-bike count inline and leaves this unset.
+	if v := os.Getenv("GBFS_VEHICLE_TYPES_URL"); v != "" {
+		builder = builder.WithVehicleTypesURL(v)
+	}
 
 	if len(ids) > 0 {
 		builder = builder.WithIDFilter(ids)

@@ -26,5 +26,5 @@ umamiId: ""
 areaOverrides: "{}"      # JSON string
 
 images:
-  ingester: ghcr.io/kardolus/citi-bike-dock-tracker:v11
+  ingester: ghcr.io/kardolus/citi-bike-dock-tracker:v13
   web: ghcr.io/kardolus/citibike-web:v59

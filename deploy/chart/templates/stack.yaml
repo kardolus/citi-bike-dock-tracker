@@ -40,6 +40,9 @@ spec:
             - {name: CITY_ID, value: {{ .Values.cityId | quote }}}
             - {name: GBFS_STATION_INFORMATION_URL, value: {{ .Values.gbfs.informationUrl | quote }}}
             - {name: GBFS_STATION_STATUS_URL, value: {{ .Values.gbfs.statusUrl | quote }}}
+            {{- with .Values.gbfs.vehicleTypesUrl }}
+            - {name: GBFS_VEHICLE_TYPES_URL, value: {{ . | quote }}}
+            {{- end }}
             - {name: NEIGHBORHOODS_PATH, value: /config/neighborhoods.json}
             - {name: USER_AGENT, value: {{ .Values.userAgent | quote }}}
             - name: DATABASE_URL

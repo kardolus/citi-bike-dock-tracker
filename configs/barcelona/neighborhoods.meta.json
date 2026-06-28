@@ -1,0 +1,642 @@
+[
+{
+"slug": "el-raval",
+"display": "el Raval",
+"area": "ciutat-vella",
+"centroid": [
+41.37821,
+2.17154
+],
+"count": 17
+},
+{
+"slug": "el-barri-gotic",
+"display": "el Barri G\u00f2tic",
+"area": "ciutat-vella",
+"centroid": [
+41.38071,
+2.17841
+],
+"count": 12
+},
+{
+"slug": "la-barceloneta",
+"display": "la Barceloneta",
+"area": "ciutat-vella",
+"centroid": [
+41.37863,
+2.19055
+],
+"count": 15
+},
+{
+"slug": "la-dreta-de-l-eixample",
+"display": "la Dreta de l'Eixample",
+"area": "eixample",
+"centroid": [
+41.39309,
+2.16786
+],
+"count": 41
+},
+{
+"slug": "l-antiga-esquerra-de-l-eixample",
+"display": "l'Antiga Esquerra de l'Eixample",
+"area": "eixample",
+"centroid": [
+41.38915,
+2.1552
+],
+"count": 14
+},
+{
+"slug": "la-nova-esquerra-de-l-eixample",
+"display": "la Nova Esquerra de l'Eixample",
+"area": "eixample",
+"centroid": [
+41.38245,
+2.15028
+],
+"count": 18
+},
+{
+"slug": "sant-antoni",
+"display": "Sant Antoni",
+"area": "eixample",
+"centroid": [
+41.37848,
+2.16057
+],
+"count": 17
+},
+{
+"slug": "el-poble-sec",
+"display": "el Poble-sec",
+"area": "sants-montjuic",
+"centroid": [
+41.37062,
+2.15898
+],
+"count": 11
+},
+{
+"slug": "la-marina-del-prat-vermell",
+"display": "la Marina del Prat Vermell",
+"area": "sants-montjuic",
+"centroid": [
+41.34905,
+2.14436
+],
+"count": 2
+},
+{
+"slug": "la-marina-de-port",
+"display": "la Marina de Port",
+"area": "sants-montjuic",
+"centroid": [
+41.3607,
+2.13959
+],
+"count": 11
+},
+{
+"slug": "la-font-de-la-guatlla",
+"display": "la Font de la Guatlla",
+"area": "sants-montjuic",
+"centroid": [
+41.36992,
+2.14566
+],
+"count": 2
+},
+{
+"slug": "sant-pere-santa-caterina-i-la-ribera",
+"display": "Sant Pere, Santa Caterina i la Ribera",
+"area": "ciutat-vella",
+"centroid": [
+41.38767,
+2.18159
+],
+"count": 16
+},
+{
+"slug": "el-fort-pienc",
+"display": "el Fort Pienc",
+"area": "eixample",
+"centroid": [
+41.39743,
+2.1819
+],
+"count": 13
+},
+{
+"slug": "la-sagrada-familia",
+"display": "la Sagrada Fam\u00edlia",
+"area": "eixample",
+"centroid": [
+41.40586,
+2.17622
+],
+"count": 16
+},
+{
+"slug": "les-tres-torres",
+"display": "les Tres Torres",
+"area": "sarria-sant-gervasi",
+"centroid": [
+41.39821,
+2.13089
+],
+"count": 8
+},
+{
+"slug": "sant-gervasi-la-bonanova",
+"display": "Sant Gervasi - la Bonanova",
+"area": "sarria-sant-gervasi",
+"centroid": [
+41.40815,
+2.13494
+],
+"count": 6
+},
+{
+"slug": "el-putxet-i-el-farro",
+"display": "el Putxet i el Farr\u00f3",
+"area": "sarria-sant-gervasi",
+"centroid": [
+41.40421,
+2.1433
+],
+"count": 2
+},
+{
+"slug": "sant-gervasi-galvany",
+"display": "Sant Gervasi - Galvany",
+"area": "sarria-sant-gervasi",
+"centroid": [
+41.39627,
+2.14389
+],
+"count": 15
+},
+{
+"slug": "vallcarca-i-els-penitents",
+"display": "Vallcarca i els Penitents",
+"area": "gracia",
+"centroid": [
+41.41395,
+2.14342
+],
+"count": 5
+},
+{
+"slug": "la-salut",
+"display": "la Salut",
+"area": "gracia",
+"centroid": [
+41.41009,
+2.15524
+],
+"count": 2
+},
+{
+"slug": "la-vila-de-gracia",
+"display": "la Vila de Gr\u00e0cia",
+"area": "gracia",
+"centroid": [
+41.40324,
+2.1568
+],
+"count": 14
+},
+{
+"slug": "el-camp-d-en-grassot-i-gracia-nova",
+"display": "el Camp d'en Grassot i Gr\u00e0cia Nova",
+"area": "gracia",
+"centroid": [
+41.40649,
+2.16522
+],
+"count": 4
+},
+{
+"slug": "el-baix-guinardo",
+"display": "el Baix Guinard\u00f3",
+"area": "horta-guinardo",
+"centroid": [
+41.41108,
+2.16724
+],
+"count": 8
+},
+{
+"slug": "el-guinardo",
+"display": "el Guinard\u00f3",
+"area": "horta-guinardo",
+"centroid": [
+41.41821,
+2.17651
+],
+"count": 8
+},
+{
+"slug": "el-carmel",
+"display": "el Carmel",
+"area": "horta-guinardo",
+"centroid": [
+41.42508,
+2.15462
+],
+"count": 3
+},
+{
+"slug": "sant-genis-dels-agudells",
+"display": "Sant Gen\u00eds dels Agudells",
+"area": "horta-guinardo",
+"centroid": [
+41.42592,
+2.13979
+],
+"count": 2
+},
+{
+"slug": "la-vall-d-hebron",
+"display": "la Vall d'Hebron",
+"area": "horta-guinardo",
+"centroid": [
+41.43065,
+2.14799
+],
+"count": 6
+},
+{
+"slug": "la-font-d-en-fargues",
+"display": "la Font d'en Fargues",
+"area": "horta-guinardo",
+"centroid": [
+41.42609,
+2.16818
+],
+"count": 3
+},
+{
+"slug": "horta",
+"display": "Horta",
+"area": "horta-guinardo",
+"centroid": [
+41.43296,
+2.16045
+],
+"count": 9
+},
+{
+"slug": "vilapicina-i-la-torre-llobeta",
+"display": "Vilapicina i la Torre Llobeta",
+"area": "nou-barris",
+"centroid": [
+41.42834,
+2.17284
+],
+"count": 4
+},
+{
+"slug": "porta",
+"display": "Porta",
+"area": "nou-barris",
+"centroid": [
+41.43415,
+2.17898
+],
+"count": 6
+},
+{
+"slug": "el-turo-de-la-peira",
+"display": "el Tur\u00f3 de la Peira",
+"area": "nou-barris",
+"centroid": [
+41.432,
+2.16937
+],
+"count": 2
+},
+{
+"slug": "hostafrancs",
+"display": "Hostafrancs",
+"area": "sants-montjuic",
+"centroid": [
+41.37564,
+2.14484
+],
+"count": 7
+},
+{
+"slug": "la-bordeta",
+"display": "la Bordeta",
+"area": "sants-montjuic",
+"centroid": [
+41.36862,
+2.13665
+],
+"count": 6
+},
+{
+"slug": "sants-badal",
+"display": "Sants - Badal",
+"area": "sants-montjuic",
+"centroid": [
+41.375,
+2.12755
+],
+"count": 5
+},
+{
+"slug": "sants",
+"display": "Sants",
+"area": "sants-montjuic",
+"centroid": [
+41.37905,
+2.13772
+],
+"count": 12
+},
+{
+"slug": "les-corts",
+"display": "les Corts",
+"area": "les-corts",
+"centroid": [
+41.38689,
+2.1339
+],
+"count": 17
+},
+{
+"slug": "la-maternitat-i-sant-ramon",
+"display": "la Maternitat i Sant Ramon",
+"area": "les-corts",
+"centroid": [
+41.38099,
+2.11895
+],
+"count": 11
+},
+{
+"slug": "pedralbes",
+"display": "Pedralbes",
+"area": "les-corts",
+"centroid": [
+41.38865,
+2.11745
+],
+"count": 9
+},
+{
+"slug": "sarria",
+"display": "Sarri\u00e0",
+"area": "sarria-sant-gervasi",
+"centroid": [
+41.3963,
+2.12211
+],
+"count": 8
+},
+{
+"slug": "la-trinitat-vella",
+"display": "la Trinitat Vella",
+"area": "sant-andreu",
+"centroid": [
+41.4495,
+2.19244
+],
+"count": 5
+},
+{
+"slug": "baro-de-viver",
+"display": "Bar\u00f3 de Viver",
+"area": "sant-andreu",
+"centroid": [
+41.44479,
+2.20075
+],
+"count": 2
+},
+{
+"slug": "el-bon-pastor",
+"display": "el Bon Pastor",
+"area": "sant-andreu",
+"centroid": [
+41.43607,
+2.20133
+],
+"count": 8
+},
+{
+"slug": "sant-andreu",
+"display": "Sant Andreu",
+"area": "sant-andreu",
+"centroid": [
+41.43529,
+2.18905
+],
+"count": 16
+},
+{
+"slug": "la-sagrera",
+"display": "la Sagrera",
+"area": "sant-andreu",
+"centroid": [
+41.42282,
+2.18855
+],
+"count": 7
+},
+{
+"slug": "el-congres-i-els-indians",
+"display": "el Congr\u00e9s i els Indians",
+"area": "sant-andreu",
+"centroid": [
+41.42492,
+2.18023
+],
+"count": 5
+},
+{
+"slug": "navas",
+"display": "Navas",
+"area": "sant-andreu",
+"centroid": [
+41.41686,
+2.18851
+],
+"count": 4
+},
+{
+"slug": "el-camp-de-l-arpa-del-clot",
+"display": "el Camp de l'Arpa del Clot",
+"area": "sant-marti",
+"centroid": [
+41.41126,
+2.18108
+],
+"count": 5
+},
+{
+"slug": "el-clot",
+"display": "el Clot",
+"area": "sant-marti",
+"centroid": [
+41.41015,
+2.18911
+],
+"count": 6
+},
+{
+"slug": "el-parc-i-la-llacuna-del-poblenou",
+"display": "el Parc i la Llacuna del Poblenou",
+"area": "sant-marti",
+"centroid": [
+41.39946,
+2.19132
+],
+"count": 12
+},
+{
+"slug": "la-vila-olimpica-del-poblenou",
+"display": "la Vila Ol\u00edmpica del Poblenou",
+"area": "sant-marti",
+"centroid": [
+41.39057,
+2.1955
+],
+"count": 15
+},
+{
+"slug": "el-poblenou",
+"display": "el Poblenou",
+"area": "sant-marti",
+"centroid": [
+41.40094,
+2.2022
+],
+"count": 17
+},
+{
+"slug": "diagonal-mar-i-el-front-maritim-del-poblenou",
+"display": "Diagonal Mar i el Front Mar\u00edtim del Poblenou",
+"area": "sant-marti",
+"centroid": [
+41.40567,
+2.21131
+],
+"count": 9
+},
+{
+"slug": "el-besos-i-el-maresme",
+"display": "el Bes\u00f2s i el Maresme",
+"area": "sant-marti",
+"centroid": [
+41.41375,
+2.21617
+],
+"count": 8
+},
+{
+"slug": "provencals-del-poblenou",
+"display": "Proven\u00e7als del Poblenou",
+"area": "sant-marti",
+"centroid": [
+41.41182,
+2.20312
+],
+"count": 10
+},
+{
+"slug": "sant-marti-de-provencals",
+"display": "Sant Mart\u00ed de Proven\u00e7als",
+"area": "sant-marti",
+"centroid": [
+41.41504,
+2.19794
+],
+"count": 4
+},
+{
+"slug": "la-verneda-i-la-pau",
+"display": "la Verneda i la Pau",
+"area": "sant-marti",
+"centroid": [
+41.42186,
+2.20249
+],
+"count": 5
+},
+{
+"slug": "la-guineueta",
+"display": "la Guineueta",
+"area": "nou-barris",
+"centroid": [
+41.43871,
+2.16954
+],
+"count": 5
+},
+{
+"slug": "verdun",
+"display": "Verdun",
+"area": "nou-barris",
+"centroid": [
+41.44416,
+2.17567
+],
+"count": 2
+},
+{
+"slug": "la-prosperitat",
+"display": "la Prosperitat",
+"area": "nou-barris",
+"centroid": [
+41.44122,
+2.18086
+],
+"count": 5
+},
+{
+"slug": "canyelles",
+"display": "Canyelles",
+"area": "nou-barris",
+"centroid": [
+41.44186,
+2.16642
+],
+"count": 1
+},
+{
+"slug": "les-roquetes",
+"display": "les Roquetes",
+"area": "nou-barris",
+"centroid": [
+41.44805,
+2.17752
+],
+"count": 1
+},
+{
+"slug": "la-trinitat-nova",
+"display": "la Trinitat Nova",
+"area": "nou-barris",
+"centroid": [
+41.448,
+2.18412
+],
+"count": 2
+},
+{
+"slug": "ciutat-meridiana",
+"display": "Ciutat Meridiana",
+"area": "nou-barris",
+"centroid": [
+41.46209,
+2.17896
+],
+"count": 1
+}
+]

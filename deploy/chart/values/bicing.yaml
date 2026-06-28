@@ -1,0 +1,20 @@
+name: bicing
+pgPort: 5443
+gbfs:
+  informationUrl: https://barcelona.publicbikesystem.net/customer/gbfs/v2/en/station_information
+  statusUrl: https://barcelona.publicbikesystem.net/customer/gbfs/v2/en/station_status
+  # PBSC reports the mechanical/e-bike split only as opaque vehicle_type_ids in
+  # station_status; this file classifies them (ICONIC/FIT=mechanical, EFIT/BOOST/…=e-bike).
+  vehicleTypesUrl: https://barcelona.publicbikesystem.net/customer/gbfs/v2/en/vehicle_types
+userAgent: "bicing-bikeshare-tracker/1.0 (+https://bicing.kardol.us; unofficial, public GBFS)"
+cityId: barcelona
+brand: Bicing
+domain: bicing.kardol.us
+timezone: Europe/Madrid
+hasEbikes: true
+defaultScope: everywhere
+neighborhoodLabel: Neighborhood
+description: "Live Bicing dock availability and 90-day patterns across Barcelona — 542 stations, barri by barri, district by district."
+umamiId: 4150b56c-f90e-4e03-ac9d-895e1d25689c
+# district slugs are accent-stripped; restore the accented display names
+areaOverrides: '{"ciutat-vella": "Ciutat Vella", "eixample": "Eixample", "gracia": "Gràcia", "horta-guinardo": "Horta-Guinardó", "les-corts": "Les Corts", "nou-barris": "Nou Barris", "sant-andreu": "Sant Andreu", "sant-marti": "Sant Martí", "sants-montjuic": "Sants-Montjuïc", "sarria-sant-gervasi": "Sarrià-Sant Gervasi"}'
