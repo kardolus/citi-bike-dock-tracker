@@ -1,0 +1,25 @@
+# Capital Bikeshare (Washington, DC region) — per-city config for the multi-city rollout.
+# Source of truth for the env the DC ingester + web instances run with. neighborhoods.json
+# (ingester) + neighborhoods.meta.json (web) are built by scripts/build_dc.py.
+city_id: dc
+brand: Capital Bikeshare
+domain: dc.kardol.us
+timezone: America/New_York          # same as NYC
+has_ebikes: true
+
+# Geography hierarchy: area = jurisdiction (DC + the VA/MD counties), neighborhood =
+# DC Neighborhood Cluster within DC, the jurisdiction itself in the suburbs.
+area_label: Area
+neighborhood_label: Neighborhood
+
+gbfs:
+  station_information_url: https://gbfs.lyft.com/gbfs/2.3/dca-cabi/en/station_information.json
+  station_status_url:      https://gbfs.lyft.com/gbfs/2.3/dca-cabi/en/station_status.json
+
+# Web AREA_OVERRIDES (titlecasing the slug isn't enough for these two).
+area_overrides:
+  washington-dc: "Washington, DC"
+  prince-george-s: "Prince George's"
+
+# Coverage (scripts/build_dc.py, validated against the live feed): 48 neighborhoods,
+# 849/849 stations, 0 snapped — 41 DC clusters (411 stations) + 7 suburban counties.
