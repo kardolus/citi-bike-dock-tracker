@@ -1,0 +1,872 @@
+[
+{
+"slug": "paris-10",
+"display": "Paris 10e",
+"area": "paris",
+"centroid": [
+48.87605,
+2.35961
+],
+"count": 54
+},
+{
+"slug": "paris-18",
+"display": "Paris 18e",
+"area": "paris",
+"centroid": [
+48.89124,
+2.34521
+],
+"count": 62
+},
+{
+"slug": "paris-9",
+"display": "Paris 9e",
+"area": "paris",
+"centroid": [
+48.87717,
+2.33782
+],
+"count": 45
+},
+{
+"slug": "paris-11",
+"display": "Paris 11e",
+"area": "paris",
+"centroid": [
+48.85906,
+2.37883
+],
+"count": 57
+},
+{
+"slug": "paris-14",
+"display": "Paris 14e",
+"area": "paris",
+"centroid": [
+48.83019,
+2.32571
+],
+"count": 56
+},
+{
+"slug": "paris-4",
+"display": "Paris 4e",
+"area": "paris",
+"centroid": [
+48.85535,
+2.35723
+],
+"count": 26
+},
+{
+"slug": "paris-5",
+"display": "Paris 5e",
+"area": "paris",
+"centroid": [
+48.84545,
+2.34961
+],
+"count": 36
+},
+{
+"slug": "paris-2",
+"display": "Paris 2e",
+"area": "paris",
+"centroid": [
+48.86829,
+2.34256
+],
+"count": 24
+},
+{
+"slug": "paris-8",
+"display": "Paris 8e",
+"area": "paris",
+"centroid": [
+48.87379,
+2.31145
+],
+"count": 52
+},
+{
+"slug": "paris-20",
+"display": "Paris 20e",
+"area": "paris",
+"centroid": [
+48.86306,
+2.40104
+],
+"count": 69
+},
+{
+"slug": "paris-6",
+"display": "Paris 6e",
+"area": "paris",
+"centroid": [
+48.84955,
+2.3334
+],
+"count": 34
+},
+{
+"slug": "paris-15",
+"display": "Paris 15e",
+"area": "paris",
+"centroid": [
+48.84089,
+2.2944
+],
+"count": 89
+},
+{
+"slug": "paris-17",
+"display": "Paris 17e",
+"area": "paris",
+"centroid": [
+48.88663,
+2.30727
+],
+"count": 63
+},
+{
+"slug": "paris-12",
+"display": "Paris 12e",
+"area": "paris",
+"centroid": [
+48.8399,
+2.40072
+],
+"count": 67
+},
+{
+"slug": "paris-16",
+"display": "Paris 16e",
+"area": "paris",
+"centroid": [
+48.8606,
+2.2738
+],
+"count": 62
+},
+{
+"slug": "paris-19",
+"display": "Paris 19e",
+"area": "paris",
+"centroid": [
+48.88584,
+2.3837
+],
+"count": 61
+},
+{
+"slug": "paris-13",
+"display": "Paris 13e",
+"area": "paris",
+"centroid": [
+48.82883,
+2.36265
+],
+"count": 70
+},
+{
+"slug": "paris-7",
+"display": "Paris 7e",
+"area": "paris",
+"centroid": [
+48.85564,
+2.3141
+],
+"count": 29
+},
+{
+"slug": "paris-1",
+"display": "Paris 1er",
+"area": "paris",
+"centroid": [
+48.86285,
+2.34035
+],
+"count": 27
+},
+{
+"slug": "paris-3",
+"display": "Paris 3e",
+"area": "paris",
+"centroid": [
+48.86307,
+2.35964
+],
+"count": 15
+},
+{
+"slug": "asni-res-sur-seine",
+"display": "Asni\u00e8res-sur-Seine",
+"area": "hauts-de-seine",
+"centroid": [
+48.91547,
+2.29049
+],
+"count": 13
+},
+{
+"slug": "bourg-la-reine",
+"display": "Bourg-la-Reine",
+"area": "hauts-de-seine",
+"centroid": [
+48.77895,
+2.31444
+],
+"count": 3
+},
+{
+"slug": "clichy",
+"display": "Clichy",
+"area": "hauts-de-seine",
+"centroid": [
+48.90296,
+2.30732
+],
+"count": 13
+},
+{
+"slug": "gennevilliers",
+"display": "Gennevilliers",
+"area": "hauts-de-seine",
+"centroid": [
+48.93364,
+2.29607
+],
+"count": 7
+},
+{
+"slug": "montrouge",
+"display": "Montrouge",
+"area": "hauts-de-seine",
+"centroid": [
+48.81527,
+2.31762
+],
+"count": 12
+},
+{
+"slug": "villeneuve-la-garenne",
+"display": "Villeneuve-la-Garenne",
+"area": "hauts-de-seine",
+"centroid": [
+48.9343,
+2.32832
+],
+"count": 3
+},
+{
+"slug": "bagneux",
+"display": "Bagneux",
+"area": "hauts-de-seine",
+"centroid": [
+48.79601,
+2.31153
+],
+"count": 5
+},
+{
+"slug": "vanves",
+"display": "Vanves",
+"area": "hauts-de-seine",
+"centroid": [
+48.82171,
+2.28942
+],
+"count": 7
+},
+{
+"slug": "fontenay-aux-roses",
+"display": "Fontenay-aux-Roses",
+"area": "hauts-de-seine",
+"centroid": [
+48.79114,
+2.28726
+],
+"count": 4
+},
+{
+"slug": "bois-colombes",
+"display": "Bois-Colombes",
+"area": "hauts-de-seine",
+"centroid": [
+48.91705,
+2.26593
+],
+"count": 3
+},
+{
+"slug": "boulogne-billancourt",
+"display": "Boulogne-Billancourt",
+"area": "hauts-de-seine",
+"centroid": [
+48.83452,
+2.24048
+],
+"count": 30
+},
+{
+"slug": "ch-tillon",
+"display": "Ch\u00e2tillon",
+"area": "hauts-de-seine",
+"centroid": [
+48.8036,
+2.28872
+],
+"count": 6
+},
+{
+"slug": "chaville",
+"display": "Chaville",
+"area": "hauts-de-seine",
+"centroid": [
+48.8089,
+2.18953
+],
+"count": 3
+},
+{
+"slug": "clamart",
+"display": "Clamart",
+"area": "hauts-de-seine",
+"centroid": [
+48.79901,
+2.25891
+],
+"count": 3
+},
+{
+"slug": "colombes",
+"display": "Colombes",
+"area": "hauts-de-seine",
+"centroid": [
+48.93491,
+2.24158
+],
+"count": 13
+},
+{
+"slug": "courbevoie",
+"display": "Courbevoie",
+"area": "hauts-de-seine",
+"centroid": [
+48.90045,
+2.2605
+],
+"count": 6
+},
+{
+"slug": "garches",
+"display": "Garches",
+"area": "hauts-de-seine",
+"centroid": [
+48.84459,
+2.18778
+],
+"count": 5
+},
+{
+"slug": "garenne-colombes",
+"display": "Garenne-Colombes",
+"area": "hauts-de-seine",
+"centroid": [
+48.90638,
+2.24413
+],
+"count": 6
+},
+{
+"slug": "issy-les-moulineaux",
+"display": "Issy-les-Moulineaux",
+"area": "hauts-de-seine",
+"centroid": [
+48.82417,
+2.26552
+],
+"count": 22
+},
+{
+"slug": "levallois-perret",
+"display": "Levallois-Perret",
+"area": "hauts-de-seine",
+"centroid": [
+48.89333,
+2.28788
+],
+"count": 11
+},
+{
+"slug": "malakoff",
+"display": "Malakoff",
+"area": "hauts-de-seine",
+"centroid": [
+48.81886,
+2.30122
+],
+"count": 7
+},
+{
+"slug": "meudon",
+"display": "Meudon",
+"area": "hauts-de-seine",
+"centroid": [
+48.81067,
+2.23613
+],
+"count": 5
+},
+{
+"slug": "nanterre",
+"display": "Nanterre",
+"area": "hauts-de-seine",
+"centroid": [
+48.893,
+2.2091
+],
+"count": 8
+},
+{
+"slug": "neuilly-sur-seine",
+"display": "Neuilly-sur-Seine",
+"area": "hauts-de-seine",
+"centroid": [
+48.88469,
+2.26771
+],
+"count": 13
+},
+{
+"slug": "puteaux",
+"display": "Puteaux",
+"area": "hauts-de-seine",
+"centroid": [
+48.88314,
+2.24003
+],
+"count": 3
+},
+{
+"slug": "rueil-malmaison",
+"display": "Rueil-Malmaison",
+"area": "hauts-de-seine",
+"centroid": [
+48.87474,
+2.18478
+],
+"count": 10
+},
+{
+"slug": "saint-cloud",
+"display": "Saint-Cloud",
+"area": "hauts-de-seine",
+"centroid": [
+48.85213,
+2.21954
+],
+"count": 3
+},
+{
+"slug": "sceaux",
+"display": "Sceaux",
+"area": "hauts-de-seine",
+"centroid": [
+48.78029,
+2.29248
+],
+"count": 4
+},
+{
+"slug": "s-vres",
+"display": "S\u00e8vres",
+"area": "hauts-de-seine",
+"centroid": [
+48.82238,
+2.21173
+],
+"count": 6
+},
+{
+"slug": "suresnes",
+"display": "Suresnes",
+"area": "hauts-de-seine",
+"centroid": [
+48.8696,
+2.22132
+],
+"count": 10
+},
+{
+"slug": "ville-d-avray",
+"display": "Ville-d'Avray",
+"area": "hauts-de-seine",
+"centroid": [
+48.82218,
+2.1775
+],
+"count": 2
+},
+{
+"slug": "aubervilliers",
+"display": "Aubervilliers",
+"area": "seine-saint-denis",
+"centroid": [
+48.91074,
+2.381
+],
+"count": 13
+},
+{
+"slug": "bagnolet",
+"display": "Bagnolet",
+"area": "seine-saint-denis",
+"centroid": [
+48.86858,
+2.41947
+],
+"count": 8
+},
+{
+"slug": "bobigny",
+"display": "Bobigny",
+"area": "seine-saint-denis",
+"centroid": [
+48.90724,
+2.44666
+],
+"count": 6
+},
+{
+"slug": "courneuve",
+"display": "Courneuve",
+"area": "seine-saint-denis",
+"centroid": [
+48.92719,
+2.39142
+],
+"count": 3
+},
+{
+"slug": "le-saint-denis",
+"display": "\u00cele-Saint-Denis",
+"area": "seine-saint-denis",
+"centroid": [
+48.93542,
+2.34084
+],
+"count": 1
+},
+{
+"slug": "lilas",
+"display": "Lilas",
+"area": "seine-saint-denis",
+"centroid": [
+48.88002,
+2.41837
+],
+"count": 4
+},
+{
+"slug": "montreuil",
+"display": "Montreuil",
+"area": "seine-saint-denis",
+"centroid": [
+48.85959,
+2.43581
+],
+"count": 23
+},
+{
+"slug": "noisy-le-sec",
+"display": "Noisy-le-Sec",
+"area": "seine-saint-denis",
+"centroid": [
+48.89994,
+2.46178
+],
+"count": 2
+},
+{
+"slug": "pantin",
+"display": "Pantin",
+"area": "seine-saint-denis",
+"centroid": [
+48.89669,
+2.4083
+],
+"count": 20
+},
+{
+"slug": "romainville",
+"display": "Romainville",
+"area": "seine-saint-denis",
+"centroid": [
+48.88363,
+2.43802
+],
+"count": 6
+},
+{
+"slug": "saint-denis",
+"display": "Saint-Denis",
+"area": "seine-saint-denis",
+"centroid": [
+48.92743,
+2.35786
+],
+"count": 19
+},
+{
+"slug": "pr-saint-gervais",
+"display": "Pr\u00e9-Saint-Gervais",
+"area": "seine-saint-denis",
+"centroid": [
+48.88533,
+2.40781
+],
+"count": 2
+},
+{
+"slug": "rosny-sous-bois",
+"display": "Rosny-sous-Bois",
+"area": "seine-saint-denis",
+"centroid": [
+48.87353,
+2.48622
+],
+"count": 5
+},
+{
+"slug": "saint-ouen",
+"display": "Saint-Ouen",
+"area": "seine-saint-denis",
+"centroid": [
+48.90802,
+2.33387
+],
+"count": 11
+},
+{
+"slug": "charenton-le-pont",
+"display": "Charenton-le-Pont",
+"area": "val-de-marne",
+"centroid": [
+48.8235,
+2.40792
+],
+"count": 6
+},
+{
+"slug": "choisy-le-roi",
+"display": "Choisy-le-Roi",
+"area": "val-de-marne",
+"centroid": [
+48.76759,
+2.40834
+],
+"count": 3
+},
+{
+"slug": "ivry-sur-seine",
+"display": "Ivry-sur-Seine",
+"area": "val-de-marne",
+"centroid": [
+48.81324,
+2.38611
+],
+"count": 17
+},
+{
+"slug": "maisons-alfort",
+"display": "Maisons-Alfort",
+"area": "val-de-marne",
+"centroid": [
+48.80574,
+2.43767
+],
+"count": 7
+},
+{
+"slug": "orly",
+"display": "Orly",
+"area": "val-de-marne",
+"centroid": [
+48.74483,
+2.40949
+],
+"count": 3
+},
+{
+"slug": "saint-maurice",
+"display": "Saint-Maurice",
+"area": "val-de-marne",
+"centroid": [
+48.81845,
+2.43359
+],
+"count": 3
+},
+{
+"slug": "vitry-sur-seine",
+"display": "Vitry-sur-Seine",
+"area": "val-de-marne",
+"centroid": [
+48.78824,
+2.39364
+],
+"count": 17
+},
+{
+"slug": "alfortville",
+"display": "Alfortville",
+"area": "val-de-marne",
+"centroid": [
+48.80157,
+2.42204
+],
+"count": 5
+},
+{
+"slug": "champigny-sur-marne",
+"display": "Champigny-sur-Marne",
+"area": "val-de-marne",
+"centroid": [
+48.81795,
+2.50786
+],
+"count": 5
+},
+{
+"slug": "joinville-le-pont",
+"display": "Joinville-le-Pont",
+"area": "val-de-marne",
+"centroid": [
+48.81997,
+2.46909
+],
+"count": 2
+},
+{
+"slug": "kremlin-bic-tre",
+"display": "Kremlin-Bic\u00eatre",
+"area": "val-de-marne",
+"centroid": [
+48.81113,
+2.35931
+],
+"count": 5
+},
+{
+"slug": "nogent-sur-marne",
+"display": "Nogent-sur-Marne",
+"area": "val-de-marne",
+"centroid": [
+48.83585,
+2.48359
+],
+"count": 4
+},
+{
+"slug": "saint-mand",
+"display": "Saint-Mand\u00e9",
+"area": "val-de-marne",
+"centroid": [
+48.83965,
+2.41835
+],
+"count": 5
+},
+{
+"slug": "vincennes",
+"display": "Vincennes",
+"area": "val-de-marne",
+"centroid": [
+48.84728,
+2.43621
+],
+"count": 10
+},
+{
+"slug": "arcueil",
+"display": "Arcueil",
+"area": "val-de-marne",
+"centroid": [
+48.80642,
+2.33177
+],
+"count": 4
+},
+{
+"slug": "cachan",
+"display": "Cachan",
+"area": "val-de-marne",
+"centroid": [
+48.79003,
+2.33165
+],
+"count": 4
+},
+{
+"slug": "chevilly-larue",
+"display": "Chevilly-Larue",
+"area": "val-de-marne",
+"centroid": [
+48.7691,
+2.34586
+],
+"count": 3
+},
+{
+"slug": "cr-teil",
+"display": "Cr\u00e9teil",
+"area": "val-de-marne",
+"centroid": [
+48.78367,
+2.45633
+],
+"count": 17
+},
+{
+"slug": "fontenay-sous-bois",
+"display": "Fontenay-sous-Bois",
+"area": "val-de-marne",
+"centroid": [
+48.85123,
+2.47268
+],
+"count": 12
+},
+{
+"slug": "gentilly",
+"display": "Gentilly",
+"area": "val-de-marne",
+"centroid": [
+48.81335,
+2.34187
+],
+"count": 4
+},
+{
+"slug": "thiais",
+"display": "Thiais",
+"area": "val-de-marne",
+"centroid": [
+48.75988,
+2.39416
+],
+"count": 3
+},
+{
+"slug": "villejuif",
+"display": "Villejuif",
+"area": "val-de-marne",
+"centroid": [
+48.79091,
+2.36158
+],
+"count": 11
+}
+]
