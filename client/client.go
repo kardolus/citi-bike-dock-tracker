@@ -542,6 +542,11 @@ func (c *Client) IngestPostgres(dsn string) error {
 	if _, err := db.Exec(createDockStatusTable); err != nil {
 		return fmt.Errorf("ensure schema: %w", err)
 	}
+	// Guard against a misconfigured deploy (a city's ingester pointed at another city's
+	// DB): stamp/assert this DB's city_id. Fatal on mismatch so we never corrupt data.
+	if err := ensureCityID(db); err != nil {
+		return err
+	}
 	// If TimescaleDB is available, make dock_status a compressed hypertable.
 	// Non-fatal: plain Postgres (or any failure here) just means uncompressed rows.
 	var hasTimescale bool
@@ -577,6 +582,33 @@ func (c *Client) IngestPostgres(dsn string) error {
 			metrics.MarkSuccess(c.timeProvider.Now())
 		}
 		time.Sleep(time.Duration(c.interval) * time.Second)
+	}
+}
+
+// ensureCityID stamps app_metadata.city_id with the CITY_ID env on first run and asserts
+// it never changes — so a Paris ingester pointed at the CDMX DB (or similar) fails fast
+// instead of writing into the wrong database. No-op when CITY_ID is unset (the original
+// NYC deploy), so it's safe to roll out incrementally.
+func ensureCityID(db *sql.DB) error {
+	cityID := os.Getenv("CITY_ID")
+	if cityID == "" {
+		return nil
+	}
+	if _, err := db.Exec(`CREATE TABLE IF NOT EXISTS app_metadata (key text PRIMARY KEY, value text NOT NULL)`); err != nil {
+		return fmt.Errorf("app_metadata: %w", err)
+	}
+	var existing string
+	switch err := db.QueryRow("SELECT value FROM app_metadata WHERE key='city_id'").Scan(&existing); err {
+	case sql.ErrNoRows:
+		_, err = db.Exec("INSERT INTO app_metadata(key,value) VALUES('city_id',$1)", cityID)
+		return err
+	case nil:
+		if existing != cityID {
+			return fmt.Errorf("city_id mismatch: this DB is %q but CITY_ID=%q — wrong database?", existing, cityID)
+		}
+		return nil
+	default:
+		return err
 	}
 }
 
