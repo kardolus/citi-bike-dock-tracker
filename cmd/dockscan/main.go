@@ -141,8 +141,17 @@ func runInfo(cmd *cobra.Command, args []string) error {
 func runTs(cmd *cobra.Command, args []string) error {
 	builder := client.NewClientBuilder()
 
+	// Per-city config via env (one image serves every city). GBFS_URL overrides the
+	// base; GBFS_STATION_INFORMATION_URL / GBFS_STATION_STATUS_URL override the full
+	// feed URLs (operators lay out paths differently). All optional — unset = NYC.
+	if v := os.Getenv("GBFS_URL"); v != "" {
+		ServiceURL = v
+	}
 	if ServiceURL != "" {
 		builder = builder.WithServiceURL(ServiceURL)
+	}
+	if infoURL, statusURL := os.Getenv("GBFS_STATION_INFORMATION_URL"), os.Getenv("GBFS_STATION_STATUS_URL"); infoURL != "" || statusURL != "" {
+		builder = builder.WithFeedURLs(infoURL, statusURL)
 	}
 
 	if len(ids) > 0 {
@@ -157,9 +166,17 @@ func runTs(cmd *cobra.Command, args []string) error {
 		builder = builder.WithOutputDirectory(output)
 	}
 
-	// "bk-curated" switches to the curated multi-neighborhood set (polygon
-	// assignment + per-station neighborhood tagging) instead of a single bbox.
-	if strings.ToLower(area) == curatedArea {
+	// Neighborhood assignment source, in precedence order:
+	//   1. NEIGHBORHOODS_PATH env  → load that file (the per-city ConfigMap mount).
+	//   2. --area bk-curated       → the embedded NYC default (legacy / fallback).
+	//   3. otherwise               → bbox / no neighborhood tagging.
+	if path := os.Getenv("NEIGHBORHOODS_PATH"); path != "" {
+		ns, err := client.LoadNeighborhoodsFromFile(path)
+		if err != nil {
+			return err
+		}
+		builder = builder.WithNeighborhoods(ns)
+	} else if strings.ToLower(area) == curatedArea {
 		ns, err := client.LoadNeighborhoods()
 		if err != nil {
 			return err

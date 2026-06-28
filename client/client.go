@@ -56,6 +56,7 @@ type Client struct {
 	timeProvider    TimeProvider
 	interval        int
 	serviceURL      string
+	statusURL       string // full station_status URL; overrides serviceURL+path when set
 	currentDate     time.Time
 	outputDirectory string
 }
@@ -66,6 +67,8 @@ type ClientBuilder struct {
 	timeProvider    TimeProvider
 	interval        int
 	serviceURL      string
+	statusURL       string // full station_status URL (per-city, e.g. Lyft /gbfs/2.3/dca-cabi/en/...)
+	infoURL         string // full station_information URL
 	filteredIDs     map[string]bool
 	bbox            *BBox
 	neighborhoods   []Neighborhood
@@ -124,9 +127,20 @@ func (b *ClientBuilder) WithOutputDirectory(dir string) *ClientBuilder {
 	return b
 }
 
-// WithServiceURL overwrites the default service URL
+// WithServiceURL overwrites the default service URL (base; combined with the
+// default station_information/station_status paths).
 func (b *ClientBuilder) WithServiceURL(url string) *ClientBuilder {
 	b.serviceURL = url
+	return b
+}
+
+// WithFeedURLs sets the full station_information and station_status URLs directly,
+// overriding serviceURL+path. Needed because operators lay out their GBFS paths
+// differently (Lyft `/gbfs/2.3/<system>/en/...`, Smovengo `/opendata/...`). Empty
+// values fall back to serviceURL + the default paths.
+func (b *ClientBuilder) WithFeedURLs(infoURL, statusURL string) *ClientBuilder {
+	b.infoURL = infoURL
+	b.statusURL = statusURL
 	return b
 }
 
@@ -171,13 +185,18 @@ func (b *ClientBuilder) Build() (*Client, error) {
 		interval:        b.interval,
 		timeProvider:    b.timeProvider,
 		serviceURL:      b.serviceURL,
+		statusURL:       b.statusURL,
 		currentDate:     startOfDay(b.timeProvider.Now()),
 		outputDirectory: b.outputDirectory,
 	}, nil
 }
 
 func (b *ClientBuilder) getStationInformation() (types.StationInformation, error) {
-	raw, err := b.caller.Get(b.serviceURL + StationInformationPath)
+	url := b.infoURL
+	if url == "" {
+		url = b.serviceURL + StationInformationPath
+	}
+	raw, err := b.caller.Get(url)
 	if err != nil {
 		return types.StationInformation{}, err
 	}
@@ -393,7 +412,11 @@ func (c *Client) gatherStationData() ([]types.NormalizedStationDataTS, error) {
 }
 
 func (c *Client) getStationStatus() (types.StationStatus, error) {
-	raw, err := c.caller.Get(c.serviceURL + StationStatusPath)
+	url := c.statusURL
+	if url == "" {
+		url = c.serviceURL + StationStatusPath
+	}
+	raw, err := c.caller.Get(url)
 	if err != nil {
 		return types.StationStatus{}, err
 	}
@@ -422,7 +445,7 @@ func normalizeStationData(stationStatus types.Station, stationInfo types.Station
 	item.Latitude = stationInfo.Lat
 	item.Location = fmt.Sprintf(GoogleMapsQuery, stationInfo.Lat, stationInfo.Lon)
 	item.BikesAvailable = stationStatus.NumBikesAvailable
-	item.EBikesAvailable = stationStatus.NumEbikesAvailable
+	item.EBikesAvailable = stationStatus.Ebikes()
 	item.BikesDisabled = stationStatus.NumBikesDisabled
 	item.DocksAvailable = stationStatus.NumDocksAvailable
 	item.DocksDisabled = stationStatus.NumDocksDisabled

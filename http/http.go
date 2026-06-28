@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"io"
 	"net/http"
+	"os"
 	"time"
 )
 
@@ -15,7 +16,17 @@ const (
 	errFailedToMakeRequest   = "failed to make request: %w"
 	errHTTP                  = "http error: %d"
 	headerContentType        = "Content-Type"
+	defaultUserAgent         = "dockscan-bikeshare-tracker/1.0 (+https://kardol.us; unofficial, public GBFS)"
 )
+
+// userAgent identifies the poller to feed operators (good citizenship at N cities);
+// override with the USER_AGENT env var.
+var userAgent = func() string {
+	if v := os.Getenv("USER_AGENT"); v != "" {
+		return v
+	}
+	return defaultUserAgent
+}()
 
 type Caller interface {
 	Get(url string) ([]byte, error)
@@ -70,6 +81,7 @@ func (r *RestCaller) newRequest(method, url string, body []byte) (*http.Request,
 	}
 
 	req.Header.Set(headerContentType, contentType)
+	req.Header.Set("User-Agent", userAgent)
 
 	return req, nil
 }

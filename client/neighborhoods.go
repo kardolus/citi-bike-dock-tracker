@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"math"
+	"os"
 )
 
 //go:embed neighborhoods.json
@@ -26,10 +27,26 @@ type Neighborhood struct {
 	Polygon  [][2]float64   `json:"polygon"` // legacy single ring (back-compat)
 }
 
-// LoadNeighborhoods returns the embedded neighborhood set.
+// LoadNeighborhoods returns the embedded neighborhood set (the NYC default; kept
+// as a fallback for the original Citi Bike deployment and the test suite).
 func LoadNeighborhoods() ([]Neighborhood, error) {
+	return parseNeighborhoods(neighborhoodsJSON)
+}
+
+// LoadNeighborhoodsFromFile reads the neighborhood set from a file on disk — the
+// per-city path (a mounted ConfigMap) that makes one image serve every city. It is
+// the runtime source when NEIGHBORHOODS_PATH is set; the embed is only the fallback.
+func LoadNeighborhoodsFromFile(path string) ([]Neighborhood, error) {
+	data, err := os.ReadFile(path)
+	if err != nil {
+		return nil, fmt.Errorf("read neighborhoods %q: %w", path, err)
+	}
+	return parseNeighborhoods(data)
+}
+
+func parseNeighborhoods(data []byte) ([]Neighborhood, error) {
 	var ns []Neighborhood
-	if err := json.Unmarshal(neighborhoodsJSON, &ns); err != nil {
+	if err := json.Unmarshal(data, &ns); err != nil {
 		return nil, fmt.Errorf("parse neighborhoods.json: %w", err)
 	}
 	if len(ns) == 0 {
