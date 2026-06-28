@@ -478,13 +478,13 @@ func normalizeStationData(stationStatus types.Station, stationInfo types.Station
 	var item types.NormalizedStation
 
 	item.ID = stationStatus.StationID
-	item.Name = stationInfo.Name
+	item.Name = stationInfo.Name.String()
 	item.Longitude = stationInfo.Lon
 	item.Latitude = stationInfo.Lat
 	item.Location = fmt.Sprintf(GoogleMapsQuery, stationInfo.Lat, stationInfo.Lon)
-	item.BikesAvailable = stationStatus.NumBikesAvailable
+	item.BikesAvailable = stationStatus.Bikes()
 	item.EBikesAvailable = stationStatus.EbikesWith(electricTypes)
-	item.BikesDisabled = stationStatus.NumBikesDisabled
+	item.BikesDisabled = stationStatus.Disabled()
 	item.DocksAvailable = stationStatus.NumDocksAvailable
 	item.DocksDisabled = stationStatus.NumDocksDisabled
 	item.ScootersAvailable = stationStatus.NumScootersAvailable

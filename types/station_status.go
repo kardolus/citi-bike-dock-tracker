@@ -4,13 +4,13 @@ type StationStatus struct {
 	Data struct {
 		Stations []Station `json:"stations"`
 	} `json:"data"`
-	LastUpdated int `json:"last_updated"`
+	LastUpdated any `json:"last_updated"`
 	TTL         int `json:"ttl"`
 }
 
 type Station struct {
 	NumScootersUnavailable int    `json:"num_scooters_unavailable,omitempty"`
-	LastReported           int    `json:"last_reported"`
+	LastReported           any    `json:"last_reported"`
 	EightdHasAvailableKeys bool   `json:"eightd_has_available_keys"`
 	IsReturning            Flag   `json:"is_returning"`
 	StationID              string `json:"station_id"`
@@ -22,6 +22,10 @@ type Station struct {
 	NumDocksDisabled       int    `json:"num_docks_disabled"`
 	NumBikesAvailable      int    `json:"num_bikes_available"`
 	NumDocksAvailable      int    `json:"num_docks_available"`
+	// GBFS v3 (PBSC v3, e.g. BA Ecobici) renames num_bikes_* to num_vehicles_*; read
+	// both so Bikes()/Disabled() coalesce across versions. v2 feeds leave these zero.
+	NumVehiclesAvailable int `json:"num_vehicles_available"`
+	NumVehiclesDisabled  int `json:"num_vehicles_disabled"`
 	// NumBikesAvailableTypes is the Smovengo/Vélib' way of reporting the
 	// mechanical/e-bike split (e.g. [{"mechanical":1},{"ebike":8}]); Lyft feeds
 	// (Citi Bike, Capital Bikeshare, Ecobici) use num_ebikes_available instead.
@@ -49,6 +53,24 @@ func (s Station) Ebikes() int {
 		return s.NumEbikesAvailable
 	}
 	return s.ebikeTypeSum()
+}
+
+// Bikes is the available-bike count, coalescing GBFS v2 num_bikes_available and v3
+// num_vehicles_available (the two are mutually exclusive per feed). For NYC (v2) this
+// is exactly num_bikes_available, so it stays byte-identical.
+func (s Station) Bikes() int {
+	if s.NumBikesAvailable > 0 {
+		return s.NumBikesAvailable
+	}
+	return s.NumVehiclesAvailable
+}
+
+// Disabled coalesces v2 num_bikes_disabled and v3 num_vehicles_disabled.
+func (s Station) Disabled() int {
+	if s.NumBikesDisabled > 0 {
+		return s.NumBikesDisabled
+	}
+	return s.NumVehiclesDisabled
 }
 
 func (s Station) ebikeTypeSum() int {

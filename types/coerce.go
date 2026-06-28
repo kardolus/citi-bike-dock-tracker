@@ -1,9 +1,54 @@
 package types
 
 import (
+	"bytes"
 	"encoding/json"
 	"strings"
 )
+
+// LocalizedText is a name that arrives as a plain string (GBFS v2 — Lyft/Smovengo/PBSC v2)
+// or a localized array [{"text":…,"language":…}] (GBFS v3 — PBSC v3, e.g. BA Ecobici).
+// String() returns the Spanish entry when present, else the first; for a plain string it's
+// just that string, so v2 feeds (incl. NYC) stay byte-identical.
+type LocalizedText string
+
+func (t *LocalizedText) String() string { return string(*t) }
+
+func (t *LocalizedText) UnmarshalJSON(b []byte) error {
+	b = bytes.TrimSpace(b)
+	if len(b) == 0 || string(b) == "null" {
+		*t = ""
+		return nil
+	}
+	if b[0] == '"' {
+		var s string
+		if err := json.Unmarshal(b, &s); err != nil {
+			return err
+		}
+		*t = LocalizedText(s)
+		return nil
+	}
+	var arr []struct {
+		Text     string `json:"text"`
+		Language string `json:"language"`
+	}
+	if err := json.Unmarshal(b, &arr); err != nil {
+		return err
+	}
+	if len(arr) == 0 {
+		*t = ""
+		return nil
+	}
+	pick := arr[0].Text
+	for _, e := range arr {
+		if e.Language == "es" {
+			pick = e.Text
+			break
+		}
+	}
+	*t = LocalizedText(pick)
+	return nil
+}
 
 // Flag is a GBFS status flag (is_renting/is_returning/is_installed). Lyft feeds send
 // these as 1/0 integers while PBSC (Bicing) and the GBFS spec proper use JSON booleans;

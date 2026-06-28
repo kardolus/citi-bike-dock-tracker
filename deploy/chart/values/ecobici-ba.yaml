@@ -1,0 +1,19 @@
+name: ecobici-ba
+pgPort: 5444
+gbfs:
+  # PBSC GBFS v3 (localized name array + num_vehicles_*; handled by the v3 adapter).
+  informationUrl: https://buenosaires.publicbikesystem.net/customer/gbfs/v3.0/station_information.json
+  statusUrl: https://buenosaires.publicbikesystem.net/customer/gbfs/v3.0/station_status.json
+userAgent: "ecobici-ba-bikeshare-tracker/1.0 (+https://ecobici-ba.kardol.us; unofficial, public GBFS)"
+cityId: baires
+brand: Ecobici
+domain: ecobici-ba.kardol.us
+timezone: America/Argentina/Buenos_Aires
+hasEbikes: false
+defaultScope: everywhere
+neighborhoodLabel: Barrio
+defaultLang: es
+description: "Disponibilidad de anclajes de Ecobici en directo y patrones de 90 días en Buenos Aires — 394 estaciones, barrio por barrio, comuna por comuna."
+umamiId: dff2b9b5-4e67-4609-9b67-6dd66cfd8f7e
+# comuna slugs -> display names
+areaOverrides: '{"comuna-1": "Comuna 1", "comuna-2": "Comuna 2", "comuna-3": "Comuna 3", "comuna-4": "Comuna 4", "comuna-5": "Comuna 5", "comuna-6": "Comuna 6", "comuna-7": "Comuna 7", "comuna-8": "Comuna 8", "comuna-9": "Comuna 9", "comuna-10": "Comuna 10", "comuna-11": "Comuna 11", "comuna-12": "Comuna 12", "comuna-13": "Comuna 13", "comuna-14": "Comuna 14", "comuna-15": "Comuna 15"}'

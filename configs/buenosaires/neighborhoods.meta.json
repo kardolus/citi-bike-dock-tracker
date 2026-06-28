@@ -1,0 +1,482 @@
+[
+{
+"slug": "agronomia",
+"display": "Agronomia",
+"area": "comuna-15",
+"centroid": [
+-34.59289,
+-58.48911
+],
+"count": 3
+},
+{
+"slug": "almagro",
+"display": "Almagro",
+"area": "comuna-5",
+"centroid": [
+-34.60874,
+-58.42194
+],
+"count": 11
+},
+{
+"slug": "balvanera",
+"display": "Balvanera",
+"area": "comuna-3",
+"centroid": [
+-34.60905,
+-58.40277
+],
+"count": 15
+},
+{
+"slug": "barracas",
+"display": "Barracas",
+"area": "comuna-4",
+"centroid": [
+-34.64307,
+-58.38017
+],
+"count": 8
+},
+{
+"slug": "belgrano",
+"display": "Belgrano",
+"area": "comuna-13",
+"centroid": [
+-34.5556,
+-58.45102
+],
+"count": 23
+},
+{
+"slug": "la-boca",
+"display": "La Boca",
+"area": "comuna-4",
+"centroid": [
+-34.63151,
+-58.36237
+],
+"count": 4
+},
+{
+"slug": "boedo",
+"display": "Boedo",
+"area": "comuna-5",
+"centroid": [
+-34.6272,
+-58.41807
+],
+"count": 6
+},
+{
+"slug": "caballito",
+"display": "Caballito",
+"area": "comuna-6",
+"centroid": [
+-34.61644,
+-58.44264
+],
+"count": 19
+},
+{
+"slug": "chacarita",
+"display": "Chacarita",
+"area": "comuna-15",
+"centroid": [
+-34.58784,
+-58.44998
+],
+"count": 6
+},
+{
+"slug": "coghlan",
+"display": "Coghlan",
+"area": "comuna-12",
+"centroid": [
+-34.56083,
+-58.47512
+],
+"count": 5
+},
+{
+"slug": "colegiales",
+"display": "Colegiales",
+"area": "comuna-13",
+"centroid": [
+-34.57468,
+-58.45256
+],
+"count": 8
+},
+{
+"slug": "constitucion",
+"display": "Constitucion",
+"area": "comuna-1",
+"centroid": [
+-34.62238,
+-58.38312
+],
+"count": 6
+},
+{
+"slug": "flores",
+"display": "Flores",
+"area": "comuna-7",
+"centroid": [
+-34.63122,
+-58.46313
+],
+"count": 12
+},
+{
+"slug": "floresta",
+"display": "Floresta",
+"area": "comuna-10",
+"centroid": [
+-34.62584,
+-58.48939
+],
+"count": 4
+},
+{
+"slug": "liniers",
+"display": "Liniers",
+"area": "comuna-9",
+"centroid": [
+-34.64329,
+-58.51553
+],
+"count": 6
+},
+{
+"slug": "mataderos",
+"display": "Mataderos",
+"area": "comuna-9",
+"centroid": [
+-34.65248,
+-58.49698
+],
+"count": 4
+},
+{
+"slug": "monserrat",
+"display": "Monserrat",
+"area": "comuna-1",
+"centroid": [
+-34.61307,
+-58.37839
+],
+"count": 10
+},
+{
+"slug": "monte-castro",
+"display": "Monte Castro",
+"area": "comuna-10",
+"centroid": [
+-34.61866,
+-58.50369
+],
+"count": 4
+},
+{
+"slug": "nueva-pompeya",
+"display": "Nueva Pompeya",
+"area": "comuna-4",
+"centroid": [
+-34.64694,
+-58.41802
+],
+"count": 4
+},
+{
+"slug": "nunez",
+"display": "Nu\u00f1ez",
+"area": "comuna-13",
+"centroid": [
+-34.54515,
+-58.46381
+],
+"count": 11
+},
+{
+"slug": "palermo",
+"display": "Palermo",
+"area": "comuna-14",
+"centroid": [
+-34.57821,
+-58.42217
+],
+"count": 43
+},
+{
+"slug": "parque-avellaneda",
+"display": "Parque Avellaneda",
+"area": "comuna-9",
+"centroid": [
+-34.6459,
+-58.47918
+],
+"count": 5
+},
+{
+"slug": "parque-chacabuco",
+"display": "Parque Chacabuco",
+"area": "comuna-7",
+"centroid": [
+-34.63439,
+-58.43366
+],
+"count": 4
+},
+{
+"slug": "parque-chas",
+"display": "Parque Chas",
+"area": "comuna-15",
+"centroid": [
+-34.5838,
+-58.4767
+],
+"count": 3
+},
+{
+"slug": "parque-patricios",
+"display": "Parque Patricios",
+"area": "comuna-4",
+"centroid": [
+-34.63588,
+-58.40009
+],
+"count": 8
+},
+{
+"slug": "paternal",
+"display": "Paternal",
+"area": "comuna-15",
+"centroid": [
+-34.59866,
+-58.46754
+],
+"count": 5
+},
+{
+"slug": "puerto-madero",
+"display": "Puerto Madero",
+"area": "comuna-1",
+"centroid": [
+-34.61053,
+-58.36262
+],
+"count": 11
+},
+{
+"slug": "recoleta",
+"display": "Recoleta",
+"area": "comuna-2",
+"centroid": [
+-34.59188,
+-58.39934
+],
+"count": 18
+},
+{
+"slug": "retiro",
+"display": "Retiro",
+"area": "comuna-1",
+"centroid": [
+-34.59485,
+-58.3775
+],
+"count": 10
+},
+{
+"slug": "saavedra",
+"display": "Saavedra",
+"area": "comuna-12",
+"centroid": [
+-34.55454,
+-58.48784
+],
+"count": 13
+},
+{
+"slug": "san-cristobal",
+"display": "San Cristobal",
+"area": "comuna-3",
+"centroid": [
+-34.62139,
+-58.40133
+],
+"count": 3
+},
+{
+"slug": "san-nicolas",
+"display": "San Nicolas",
+"area": "comuna-1",
+"centroid": [
+-34.60351,
+-58.37867
+],
+"count": 14
+},
+{
+"slug": "san-telmo",
+"display": "San Telmo",
+"area": "comuna-1",
+"centroid": [
+-34.62044,
+-58.3718
+],
+"count": 4
+},
+{
+"slug": "velez-sarsfield",
+"display": "Velez Sarsfield",
+"area": "comuna-10",
+"centroid": [
+-34.6328,
+-58.48894
+],
+"count": 3
+},
+{
+"slug": "versalles",
+"display": "Versalles",
+"area": "comuna-10",
+"centroid": [
+-34.63084,
+-58.5215
+],
+"count": 2
+},
+{
+"slug": "villa-crespo",
+"display": "Villa Crespo",
+"area": "comuna-15",
+"centroid": [
+-34.60015,
+-58.44453
+],
+"count": 14
+},
+{
+"slug": "villa-del-parque",
+"display": "Villa Del Parque",
+"area": "comuna-11",
+"centroid": [
+-34.60442,
+-58.48934
+],
+"count": 7
+},
+{
+"slug": "villa-devoto",
+"display": "Villa Devoto",
+"area": "comuna-11",
+"centroid": [
+-34.60252,
+-58.50975
+],
+"count": 11
+},
+{
+"slug": "villa-gral-mitre",
+"display": "Villa Gral. Mitre",
+"area": "comuna-11",
+"centroid": [
+-34.6131,
+-58.46963
+],
+"count": 4
+},
+{
+"slug": "villa-lugano",
+"display": "Villa Lugano",
+"area": "comuna-8",
+"centroid": [
+-34.67509,
+-58.46547
+],
+"count": 4
+},
+{
+"slug": "villa-luro",
+"display": "Villa Luro",
+"area": "comuna-10",
+"centroid": [
+-34.63665,
+-58.49959
+],
+"count": 4
+},
+{
+"slug": "villa-ortuzar",
+"display": "Villa Ortuzar",
+"area": "comuna-15",
+"centroid": [
+-34.57885,
+-58.46657
+],
+"count": 4
+},
+{
+"slug": "villa-pueyrredon",
+"display": "Villa Pueyrredon",
+"area": "comuna-12",
+"centroid": [
+-34.58089,
+-58.50224
+],
+"count": 9
+},
+{
+"slug": "villa-real",
+"display": "Villa Real",
+"area": "comuna-10",
+"centroid": [
+-34.61898,
+-58.5229
+],
+"count": 2
+},
+{
+"slug": "villa-riachuelo",
+"display": "Villa Riachuelo",
+"area": "comuna-8",
+"centroid": [
+-34.68777,
+-58.47518
+],
+"count": 1
+},
+{
+"slug": "villa-santa-rita",
+"display": "Villa Santa Rita",
+"area": "comuna-11",
+"centroid": [
+-34.61565,
+-58.48262
+],
+"count": 5
+},
+{
+"slug": "villa-soldati",
+"display": "Villa Soldati",
+"area": "comuna-8",
+"centroid": [
+-34.66878,
+-58.44428
+],
+"count": 3
+},
+{
+"slug": "villa-urquiza",
+"display": "Villa Urquiza",
+"area": "comuna-12",
+"centroid": [
+-34.57105,
+-58.48668
+],
+"count": 11
+}
+]
