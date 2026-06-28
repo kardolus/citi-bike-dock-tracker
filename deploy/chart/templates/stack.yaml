@@ -1,0 +1,129 @@
+{{- $n := .Values.name -}}
+# {{ .Values.brand }} ({{ .Values.cityId }}) — full per-city stack. DB-per-city:
+# host TimescaleDB {{ $n }}-postgres on {{ .Values.hostIP }}:{{ .Values.pgPort }}.
+apiVersion: v1
+kind: Namespace
+metadata: {name: {{ $n }}, labels: {kardol.us/group: apps}}
+---
+# no-selector Service + Endpoints → host-docker {{ $n }}-postgres
+apiVersion: v1
+kind: Service
+metadata: {name: {{ $n }}-postgres, namespace: {{ $n }}}
+spec:
+  type: ClusterIP
+  ports: [{name: pg, port: 5432, targetPort: {{ .Values.pgPort }}, protocol: TCP}]
+---
+apiVersion: v1
+kind: Endpoints
+metadata: {name: {{ $n }}-postgres, namespace: {{ $n }}}
+subsets:
+  - addresses: [{ip: {{ .Values.hostIP }}}]
+    ports: [{name: pg, port: {{ .Values.pgPort }}, protocol: TCP}]
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata: {name: dockscan, namespace: {{ $n }}, labels: {app: dockscan}}
+spec:
+  replicas: 1
+  selector: {matchLabels: {app: dockscan}}
+  template:
+    metadata: {labels: {app: dockscan}}
+    spec:
+      imagePullSecrets: [{name: ghcr-pull}]
+      containers:
+        - name: dockscan
+          image: {{ .Values.images.ingester }}
+          imagePullPolicy: IfNotPresent
+          args: ["ts", "--interval", "180", "--postgres", "--metrics-addr", ":2112"]
+          ports: [{containerPort: 2112, name: metrics}]
+          env:
+            - {name: CITY_ID, value: {{ .Values.cityId | quote }}}
+            - {name: GBFS_STATION_INFORMATION_URL, value: {{ .Values.gbfs.informationUrl | quote }}}
+            - {name: GBFS_STATION_STATUS_URL, value: {{ .Values.gbfs.statusUrl | quote }}}
+            - {name: NEIGHBORHOODS_PATH, value: /config/neighborhoods.json}
+            - {name: USER_AGENT, value: {{ .Values.userAgent | quote }}}
+            - name: DATABASE_URL
+              valueFrom: {secretKeyRef: {name: {{ $n }}-db, key: DATABASE_URL}}
+          volumeMounts:
+            - {name: neighborhoods, mountPath: /config/neighborhoods.json, subPath: neighborhoods.json}
+          readinessProbe: {httpGet: {path: /ready, port: 2112}, initialDelaySeconds: 10, periodSeconds: 15}
+          livenessProbe: {httpGet: {path: /healthz, port: 2112}, initialDelaySeconds: 10, periodSeconds: 20}
+          resources: {requests: {cpu: 25m, memory: 32Mi}, limits: {memory: 128Mi}}
+      volumes:
+        - {name: neighborhoods, configMap: {name: {{ $n }}-neighborhoods}}
+---
+apiVersion: v1
+kind: Service
+metadata: {name: dockscan, namespace: {{ $n }}, labels: {app: dockscan}}
+spec:
+  selector: {app: dockscan}
+  ports: [{name: metrics, port: 2112, targetPort: 2112}]
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata: {name: {{ $n }}-web, namespace: {{ $n }}, labels: {app: {{ $n }}-web}}
+spec:
+  replicas: 1
+  selector: {matchLabels: {app: {{ $n }}-web}}
+  template:
+    metadata: {labels: {app: {{ $n }}-web}}
+    spec:
+      imagePullSecrets: [{name: ghcr-pull}]
+      containers:
+        - name: {{ $n }}-web
+          image: {{ .Values.images.web }}
+          imagePullPolicy: IfNotPresent
+          ports: [{containerPort: 8000, name: http}]
+          env:
+            - {name: CITY_ID, value: {{ .Values.cityId | quote }}}
+            - {name: BRAND, value: {{ .Values.brand | quote }}}
+            - {name: DOMAIN, value: {{ .Values.domain | quote }}}
+            - {name: CITY_TZ, value: {{ .Values.timezone | quote }}}
+            - {name: HAS_EBIKES, value: {{ .Values.hasEbikes | quote }}}
+            - {name: COLD_START_DAYS, value: {{ .Values.coldStartDays | quote }}}
+            - {name: DEFAULT_SCOPE, value: {{ .Values.defaultScope | quote }}}
+            - {name: NEIGHBORHOOD_LABEL, value: {{ .Values.neighborhoodLabel | quote }}}
+            - {name: NEIGHBORHOODS_META_PATH, value: /config/neighborhoods.meta.json}
+            - {name: OG_IMAGE_PATH, value: /config/og.png}
+            - {name: UMAMI_WEBSITE_ID, value: {{ .Values.umamiId | quote }}}
+            - {name: DESCRIPTION, value: {{ .Values.description | quote }}}
+            - {name: AREA_OVERRIDES, value: {{ .Values.areaOverrides | quote }}}
+            - name: DATABASE_URL
+              valueFrom: {secretKeyRef: {name: {{ $n }}-web-db, key: DATABASE_URL}}
+          volumeMounts:
+            - {name: meta, mountPath: /config/neighborhoods.meta.json, subPath: neighborhoods.meta.json}
+            - {name: og, mountPath: /config/og.png, subPath: og.png}
+          readinessProbe: {httpGet: {path: /ready, port: 8000}, initialDelaySeconds: 5, periodSeconds: 15}
+          livenessProbe: {httpGet: {path: /healthz, port: 8000}, initialDelaySeconds: 10, periodSeconds: 20}
+          resources: {requests: {cpu: 25m, memory: 64Mi}, limits: {memory: 256Mi}}
+      volumes:
+        - {name: meta, configMap: {name: {{ $n }}-neighborhoods-meta}}
+        - {name: og, configMap: {name: {{ $n }}-og}}
+---
+apiVersion: v1
+kind: Service
+metadata: {name: {{ $n }}-web, namespace: {{ $n }}, labels: {app: {{ $n }}-web}}
+spec:
+  selector: {app: {{ $n }}-web}
+  ports: [{name: http, port: 8000, targetPort: 8000}]
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: {{ $n }}-web
+  namespace: {{ $n }}
+  annotations:
+    nginx.ingress.kubernetes.io/ssl-redirect: "false"
+    nginx.ingress.kubernetes.io/force-ssl-redirect: "false"
+    nginx.ingress.kubernetes.io/proxy-read-timeout: "60"
+    nginx.ingress.kubernetes.io/proxy-send-timeout: "60"
+    nginx.ingress.kubernetes.io/limit-rps: "20"
+spec:
+  ingressClassName: nginx
+  rules:
+    - host: {{ .Values.domain }}
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend: {service: {name: {{ $n }}-web, port: {number: 8000}}}

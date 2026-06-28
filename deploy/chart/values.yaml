@@ -1,0 +1,30 @@
+# Defaults for one bikeshare-city stack. Override per city via values/<city>.yaml.
+# Resource names derive from `name` (e.g. cabi → cabi-postgres, cabi-web, cabi-neighborhoods,
+# cabi-db, cabi-web-db). The neighborhoods/meta/og ConfigMaps + db Secrets + ghcr-pull are
+# created out-of-band (see deploy/chart/README), exactly as for the hand-written manifests.
+
+name: ""                 # resource prefix + namespace (e.g. cabi / velib / ecobici)
+hostIP: 10.0.0.120       # forge host running the per-city docker TimescaleDB
+pgPort: 0                # that DB's host port (e.g. 5439)
+
+gbfs:
+  informationUrl: ""
+  statusUrl: ""
+userAgent: ""
+
+# web (citibike-web) per-city config
+cityId: ""               # nyc/dc/paris/cdmx
+brand: ""
+domain: ""
+timezone: ""
+hasEbikes: true
+coldStartDays: 14
+defaultScope: everywhere
+neighborhoodLabel: Neighborhood
+description: ""
+umamiId: ""
+areaOverrides: "{}"      # JSON string
+
+images:
+  ingester: ghcr.io/kardolus/citi-bike-dock-tracker:v11
+  web: ghcr.io/kardolus/citibike-web:v59

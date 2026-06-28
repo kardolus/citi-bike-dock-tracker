@@ -1,0 +1,16 @@
+name: cabi
+pgPort: 5439
+gbfs:
+  informationUrl: https://gbfs.lyft.com/gbfs/2.3/dca-cabi/en/station_information.json
+  statusUrl: https://gbfs.lyft.com/gbfs/2.3/dca-cabi/en/station_status.json
+userAgent: "cabi-bikeshare-tracker/1.0 (+https://cabi.kardol.us; unofficial, public GBFS)"
+cityId: dc
+brand: CaBi
+domain: cabi.kardol.us
+timezone: America/New_York
+hasEbikes: true
+defaultScope: everywhere
+neighborhoodLabel: Neighborhood
+description: "Live CaBi (Capital Bikeshare) dock availability and 90-day patterns across the Washington, DC region."
+umamiId: b1d35a01-31f1-465f-9549-d830d856a84c
+areaOverrides: '{"washington-dc":"Washington, DC","prince-george-s":"Prince George''s"}'

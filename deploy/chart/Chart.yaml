@@ -1,0 +1,6 @@
+apiVersion: v2
+name: bikeshare-city
+description: One per-city bikeshare tracker stack (ingester + web + host-PG wiring + ingress).
+type: application
+version: 1.0.0
+appVersion: "1.0"
