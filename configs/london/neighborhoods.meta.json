@@ -1,0 +1,122 @@
+[
+{
+"slug": "camden",
+"display": "Camden",
+"area": "central-london",
+"centroid": [
+51.52686,
+-0.12911
+],
+"count": 68
+},
+{
+"slug": "city-of-london",
+"display": "City of London",
+"area": "central-london",
+"centroid": [
+51.51553,
+-0.09314
+],
+"count": 39
+},
+{
+"slug": "hackney",
+"display": "Hackney",
+"area": "east-london",
+"centroid": [
+51.53359,
+-0.07193
+],
+"count": 37
+},
+{
+"slug": "hammersmith-and-fulham",
+"display": "Hammersmith and Fulham",
+"area": "west-london",
+"centroid": [
+51.4845,
+-0.20969
+],
+"count": 58
+},
+{
+"slug": "islington",
+"display": "Islington",
+"area": "central-london",
+"centroid": [
+51.5289,
+-0.10474
+],
+"count": 36
+},
+{
+"slug": "kensington-and-chelsea",
+"display": "Kensington and Chelsea",
+"area": "central-london",
+"centroid": [
+51.49866,
+-0.18853
+],
+"count": 93
+},
+{
+"slug": "lambeth",
+"display": "Lambeth",
+"area": "central-london",
+"centroid": [
+51.48521,
+-0.11876
+],
+"count": 58
+},
+{
+"slug": "newham",
+"display": "Newham",
+"area": "east-london",
+"centroid": [
+51.54408,
+-0.01125
+],
+"count": 6
+},
+{
+"slug": "southwark",
+"display": "Southwark",
+"area": "central-london",
+"centroid": [
+51.49889,
+-0.08981
+],
+"count": 55
+},
+{
+"slug": "tower-hamlets",
+"display": "Tower Hamlets",
+"area": "east-london",
+"centroid": [
+51.5164,
+-0.04149
+],
+"count": 120
+},
+{
+"slug": "wandsworth",
+"display": "Wandsworth",
+"area": "south-london",
+"centroid": [
+51.46707,
+-0.17556
+],
+"count": 59
+},
+{
+"slug": "westminster",
+"display": "Westminster",
+"area": "central-london",
+"centroid": [
+51.51024,
+-0.15165
+],
+"count": 170
+}
+]

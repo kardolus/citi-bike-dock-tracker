@@ -60,6 +60,7 @@ type Client struct {
 	interval        int
 	serviceURL      string
 	statusURL       string // full station_status URL; overrides serviceURL+path when set
+	feedFormat      string // "gbfs" (default) or "tfl" (London BikePoint, non-GBFS)
 	currentDate     time.Time
 	outputDirectory string
 }
@@ -73,6 +74,7 @@ type ClientBuilder struct {
 	statusURL       string // full station_status URL (per-city, e.g. Lyft /gbfs/2.3/dca-cabi/en/...)
 	infoURL         string // full station_information URL
 	vehicleTypesURL string // full vehicle_types.json URL (PBSC/Bicing e-bike classification)
+	feedFormat      string // "gbfs" (default) or "tfl" (London Santander Cycles BikePoint)
 	filteredIDs     map[string]bool
 	bbox            *BBox
 	neighborhoods   []Neighborhood
@@ -157,6 +159,16 @@ func (b *ClientBuilder) WithVehicleTypesURL(url string) *ClientBuilder {
 	return b
 }
 
+// WithFeedFormat selects the feed parser: "gbfs" (default, every GBFS operator) or "tfl"
+// (London Santander Cycles — TfL's non-GBFS BikePoint API). For "tfl" the info/status URLs
+// both point at the BikePoint endpoint.
+func (b *ClientBuilder) WithFeedFormat(format string) *ClientBuilder {
+	if format != "" {
+		b.feedFormat = format
+	}
+	return b
+}
+
 // WithTimeProvider overwrites the default time provider
 func (b *ClientBuilder) WithTimeProvider(provider TimeProvider) *ClientBuilder {
 	b.timeProvider = provider
@@ -212,6 +224,7 @@ func (b *ClientBuilder) Build() (*Client, error) {
 		timeProvider:    b.timeProvider,
 		serviceURL:      b.serviceURL,
 		statusURL:       b.statusURL,
+		feedFormat:      b.feedFormat,
 		currentDate:     startOfDay(b.timeProvider.Now()),
 		outputDirectory: b.outputDirectory,
 	}, nil
@@ -225,6 +238,13 @@ func (b *ClientBuilder) getStationInformation() (types.StationInformation, error
 	raw, err := b.caller.Get(url)
 	if err != nil {
 		return types.StationInformation{}, err
+	}
+	if raw == nil {
+		return types.StationInformation{}, errors.New(ErrEmptyResponse)
+	}
+
+	if b.feedFormat == "tfl" {
+		return types.TflToInformation(raw)
 	}
 
 	var response types.StationInformation
@@ -457,6 +477,13 @@ func (c *Client) getStationStatus() (types.StationStatus, error) {
 	raw, err := c.caller.Get(url)
 	if err != nil {
 		return types.StationStatus{}, err
+	}
+	if raw == nil {
+		return types.StationStatus{}, errors.New(ErrEmptyResponse)
+	}
+
+	if c.feedFormat == "tfl" {
+		return types.TflToStatus(raw)
 	}
 
 	var response types.StationStatus

@@ -1,0 +1,20 @@
+name: boris
+pgPort: 5445
+feedFormat: tfl
+gbfs:
+  # London Santander Cycles has no GBFS; TfL's BikePoint API is one combined endpoint, so
+  # info + status both read it (parsed by the tfl adapter). Public — no key needed at 3-min cadence.
+  informationUrl: https://api.tfl.gov.uk/bikepoint
+  statusUrl: https://api.tfl.gov.uk/bikepoint
+userAgent: "santander-cycles-tracker/1.0 (+https://boris.kardol.us; unofficial, public TfL BikePoint)"
+cityId: london
+brand: Santander Cycles
+domain: boris.kardol.us
+timezone: Europe/London
+hasEbikes: true
+defaultScope: everywhere
+neighborhoodLabel: Borough
+description: "Live Santander Cycles dock availability and 90-day patterns across London — 799 stations, borough by borough."
+umamiId: 76fc90f5-65d3-4b6c-804c-e3f67b25353e
+# area slugs already carry "-london" (e.g. central-london -> "Central London"); no overrides needed
+areaOverrides: "{}"

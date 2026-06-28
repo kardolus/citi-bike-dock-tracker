@@ -150,7 +150,15 @@ func runTs(cmd *cobra.Command, args []string) error {
 	if ServiceURL != "" {
 		builder = builder.WithServiceURL(ServiceURL)
 	}
+	// FEED_FORMAT selects the parser: "gbfs" (default) or "tfl" (London Santander Cycles —
+	// TfL's non-GBFS BikePoint API; info+status both read the BikePoint endpoint).
+	builder = builder.WithFeedFormat(os.Getenv("FEED_FORMAT"))
 	if infoURL, statusURL := os.Getenv("GBFS_STATION_INFORMATION_URL"), os.Getenv("GBFS_STATION_STATUS_URL"); infoURL != "" || statusURL != "" {
+		// TfL BikePoint is public; an optional free app_key just raises rate limits.
+		if key := os.Getenv("TFL_APP_KEY"); key != "" {
+			infoURL = appendQuery(infoURL, "app_key="+key)
+			statusURL = appendQuery(statusURL, "app_key="+key)
+		}
 		builder = builder.WithFeedURLs(infoURL, statusURL)
 	}
 	// PBSC feeds (Bicing) need vehicle_types.json to know which vehicle_type_ids are
@@ -250,4 +258,17 @@ func runVersion(cmd *cobra.Command, args []string) error {
 	fmt.Printf("dockscan version %s (commit %s)\n", GitVersion, GitCommit)
 
 	return nil
+}
+
+// appendQuery adds a query param to a URL (used for TfL's optional app_key). Empty URLs are
+// left untouched so an unset info/status URL still falls back to the GBFS default path.
+func appendQuery(url, q string) string {
+	if url == "" {
+		return ""
+	}
+	sep := "?"
+	if strings.Contains(url, "?") {
+		sep = "&"
+	}
+	return url + sep + q
 }
