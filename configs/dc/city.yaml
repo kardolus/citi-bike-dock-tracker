@@ -2,8 +2,10 @@
 # Source of truth for the env the DC ingester + web instances run with. neighborhoods.json
 # (ingester) + neighborhoods.meta.json (web) are built by scripts/build_dc.py.
 city_id: dc
-brand: Capital Bikeshare
-domain: dc.kardol.us
+brand: CaBi                         # the local nickname DC riders actually use
+tagline: Capital Bikeshare · Washington, DC region   # so outsiders know what CaBi is
+domain: cabi.kardol.us
+k8s_namespace: cabi
 timezone: America/New_York          # same as NYC
 has_ebikes: true
 
