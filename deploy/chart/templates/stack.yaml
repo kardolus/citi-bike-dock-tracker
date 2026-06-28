@@ -93,6 +93,7 @@ spec:
             - {name: DESCRIPTION, value: {{ .Values.description | quote }}}
             - {name: AREA_OVERRIDES, value: {{ .Values.areaOverrides | quote }}}
             - {name: SERVICE_HOURS, value: {{ .Values.serviceHours | quote }}}
+            - {name: DEFAULT_LANG, value: {{ .Values.defaultLang | quote }}}
             - name: DATABASE_URL
               valueFrom: {secretKeyRef: {name: {{ $n }}-web-db, key: DATABASE_URL}}
           volumeMounts:

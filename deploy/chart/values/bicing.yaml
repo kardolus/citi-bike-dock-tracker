@@ -18,3 +18,4 @@ description: "Live Bicing dock availability and 90-day patterns across Barcelona
 umamiId: 4150b56c-f90e-4e03-ac9d-895e1d25689c
 # district slugs are accent-stripped; restore the accented display names
 areaOverrides: '{"ciutat-vella": "Ciutat Vella", "eixample": "Eixample", "gracia": "Gràcia", "horta-guinardo": "Horta-Guinardó", "les-corts": "Les Corts", "nou-barris": "Nou Barris", "sant-andreu": "Sant Andreu", "sant-marti": "Sant Martí", "sants-montjuic": "Sants-Montjuïc", "sarria-sant-gervasi": "Sarrià-Sant Gervasi"}'
+defaultLang: es

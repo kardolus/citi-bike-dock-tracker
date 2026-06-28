@@ -14,3 +14,4 @@ neighborhoodLabel: Neighborhood
 description: "Live Vélib' Métropole dock availability and 90-day patterns across the Paris region."
 umamiId: d46d7d2d-e87c-475b-b8b0-15dbaab38757
 areaOverrides: '{"paris":"Paris","hauts-de-seine":"Hauts-de-Seine","seine-saint-denis":"Seine-Saint-Denis","val-de-marne":"Val-de-Marne"}'
+defaultLang: fr
