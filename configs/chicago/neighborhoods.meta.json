@@ -1,0 +1,782 @@
+[
+{
+"slug": "rogers-park",
+"display": "Rogers Park",
+"area": "far-north-side",
+"centroid": [
+42.01179,
+-87.67088
+],
+"count": 17
+},
+{
+"slug": "west-ridge",
+"display": "West Ridge",
+"area": "far-north-side",
+"centroid": [
+42.00195,
+-87.69601
+],
+"count": 37
+},
+{
+"slug": "uptown",
+"display": "Uptown",
+"area": "far-north-side",
+"centroid": [
+41.96574,
+-87.65532
+],
+"count": 20
+},
+{
+"slug": "lincoln-square",
+"display": "Lincoln Square",
+"area": "far-north-side",
+"centroid": [
+41.97136,
+-87.68905
+],
+"count": 19
+},
+{
+"slug": "north-center",
+"display": "North Center",
+"area": "north-side",
+"centroid": [
+41.94956,
+-87.68351
+],
+"count": 18
+},
+{
+"slug": "lake-view",
+"display": "Lake View",
+"area": "north-side",
+"centroid": [
+41.94461,
+-87.65559
+],
+"count": 66
+},
+{
+"slug": "lincoln-park",
+"display": "Lincoln Park",
+"area": "north-side",
+"centroid": [
+41.92298,
+-87.65016
+],
+"count": 64
+},
+{
+"slug": "near-north-side",
+"display": "Near North Side",
+"area": "central",
+"centroid": [
+41.89776,
+-87.6324
+],
+"count": 87
+},
+{
+"slug": "edison-park",
+"display": "Edison Park",
+"area": "far-north-side",
+"centroid": [
+42.00712,
+-87.81341
+],
+"count": 11
+},
+{
+"slug": "norwood-park",
+"display": "Norwood Park",
+"area": "far-north-side",
+"centroid": [
+41.98852,
+-87.79807
+],
+"count": 35
+},
+{
+"slug": "jefferson-park",
+"display": "Jefferson Park",
+"area": "far-north-side",
+"centroid": [
+41.97744,
+-87.76942
+],
+"count": 20
+},
+{
+"slug": "forest-glen",
+"display": "Forest Glen",
+"area": "far-north-side",
+"centroid": [
+41.99276,
+-87.75477
+],
+"count": 26
+},
+{
+"slug": "north-park",
+"display": "North Park",
+"area": "far-north-side",
+"centroid": [
+41.98488,
+-87.71821
+],
+"count": 32
+},
+{
+"slug": "albany-park",
+"display": "Albany Park",
+"area": "far-north-side",
+"centroid": [
+41.96765,
+-87.72202
+],
+"count": 25
+},
+{
+"slug": "portage-park",
+"display": "Portage Park",
+"area": "northwest-side",
+"centroid": [
+41.9557,
+-87.76174
+],
+"count": 45
+},
+{
+"slug": "irving-park",
+"display": "Irving Park",
+"area": "northwest-side",
+"centroid": [
+41.95305,
+-87.72523
+],
+"count": 31
+},
+{
+"slug": "dunning",
+"display": "Dunning",
+"area": "northwest-side",
+"centroid": [
+41.94657,
+-87.80409
+],
+"count": 33
+},
+{
+"slug": "montclare",
+"display": "Montclare",
+"area": "northwest-side",
+"centroid": [
+41.92956,
+-87.79904
+],
+"count": 8
+},
+{
+"slug": "belmont-cragin",
+"display": "Belmont Cragin",
+"area": "northwest-side",
+"centroid": [
+41.92698,
+-87.76399
+],
+"count": 46
+},
+{
+"slug": "hermosa",
+"display": "Hermosa",
+"area": "northwest-side",
+"centroid": [
+41.92451,
+-87.73471
+],
+"count": 12
+},
+{
+"slug": "avondale",
+"display": "Avondale",
+"area": "north-side",
+"centroid": [
+41.9385,
+-87.70951
+],
+"count": 17
+},
+{
+"slug": "logan-square",
+"display": "Logan Square",
+"area": "north-side",
+"centroid": [
+41.92195,
+-87.69831
+],
+"count": 47
+},
+{
+"slug": "humboldt-park",
+"display": "Humboldt Park",
+"area": "west-side",
+"centroid": [
+41.90247,
+-87.72121
+],
+"count": 29
+},
+{
+"slug": "west-town",
+"display": "West Town",
+"area": "west-side",
+"centroid": [
+41.9008,
+-87.67768
+],
+"count": 67
+},
+{
+"slug": "austin",
+"display": "Austin",
+"area": "west-side",
+"centroid": [
+41.89424,
+-87.764
+],
+"count": 55
+},
+{
+"slug": "west-garfield-park",
+"display": "West Garfield Park",
+"area": "west-side",
+"centroid": [
+41.87905,
+-87.72834
+],
+"count": 15
+},
+{
+"slug": "east-garfield-park",
+"display": "East Garfield Park",
+"area": "west-side",
+"centroid": [
+41.8795,
+-87.70676
+],
+"count": 22
+},
+{
+"slug": "near-west-side",
+"display": "Near West Side",
+"area": "west-side",
+"centroid": [
+41.87898,
+-87.65498
+],
+"count": 92
+},
+{
+"slug": "north-lawndale",
+"display": "North Lawndale",
+"area": "west-side",
+"centroid": [
+41.86143,
+-87.71644
+],
+"count": 35
+},
+{
+"slug": "south-lawndale",
+"display": "South Lawndale",
+"area": "west-side",
+"centroid": [
+41.8443,
+-87.71343
+],
+"count": 29
+},
+{
+"slug": "lower-west-side",
+"display": "Lower West Side",
+"area": "west-side",
+"centroid": [
+41.85333,
+-87.66409
+],
+"count": 15
+},
+{
+"slug": "loop",
+"display": "Loop",
+"area": "central",
+"centroid": [
+41.87996,
+-87.62934
+],
+"count": 61
+},
+{
+"slug": "near-south-side",
+"display": "Near South Side",
+"area": "central",
+"centroid": [
+41.85878,
+-87.62133
+],
+"count": 15
+},
+{
+"slug": "armour-square",
+"display": "Armour Square",
+"area": "south-side",
+"centroid": [
+41.84565,
+-87.63384
+],
+"count": 9
+},
+{
+"slug": "douglas",
+"display": "Douglas",
+"area": "south-side",
+"centroid": [
+41.83531,
+-87.61755
+],
+"count": 12
+},
+{
+"slug": "oakland",
+"display": "Oakland",
+"area": "south-side",
+"centroid": [
+41.81737,
+-87.59958
+],
+"count": 1
+},
+{
+"slug": "fuller-park",
+"display": "Fuller Park",
+"area": "south-side",
+"centroid": [
+41.8091,
+-87.63378
+],
+"count": 4
+},
+{
+"slug": "grand-boulevard",
+"display": "Grand Boulevard",
+"area": "south-side",
+"centroid": [
+41.8123,
+-87.61698
+],
+"count": 21
+},
+{
+"slug": "kenwood",
+"display": "Kenwood",
+"area": "south-side",
+"centroid": [
+41.81041,
+-87.59653
+],
+"count": 7
+},
+{
+"slug": "washington-park",
+"display": "Washington Park",
+"area": "south-side",
+"centroid": [
+41.79396,
+-87.61872
+],
+"count": 9
+},
+{
+"slug": "hyde-park",
+"display": "Hyde Park",
+"area": "south-side",
+"centroid": [
+41.79499,
+-87.5908
+],
+"count": 23
+},
+{
+"slug": "woodlawn",
+"display": "Woodlawn",
+"area": "south-side",
+"centroid": [
+41.77856,
+-87.59584
+],
+"count": 23
+},
+{
+"slug": "south-shore",
+"display": "South Shore",
+"area": "south-side",
+"centroid": [
+41.76101,
+-87.57166
+],
+"count": 23
+},
+{
+"slug": "chatham",
+"display": "Chatham",
+"area": "far-southeast-side",
+"centroid": [
+41.74027,
+-87.61285
+],
+"count": 35
+},
+{
+"slug": "avalon-park",
+"display": "Avalon Park",
+"area": "far-southeast-side",
+"centroid": [
+41.74236,
+-87.5803
+],
+"count": 8
+},
+{
+"slug": "south-chicago",
+"display": "South Chicago",
+"area": "far-southeast-side",
+"centroid": [
+41.73956,
+-87.5536
+],
+"count": 24
+},
+{
+"slug": "burnside",
+"display": "Burnside",
+"area": "far-southeast-side",
+"centroid": [
+41.73226,
+-87.59697
+],
+"count": 2
+},
+{
+"slug": "calumet-heights",
+"display": "Calumet Heights",
+"area": "far-southeast-side",
+"centroid": [
+41.73236,
+-87.57717
+],
+"count": 6
+},
+{
+"slug": "roseland",
+"display": "Roseland",
+"area": "far-southeast-side",
+"centroid": [
+41.70252,
+-87.62434
+],
+"count": 40
+},
+{
+"slug": "pullman",
+"display": "Pullman",
+"area": "far-southeast-side",
+"centroid": [
+41.7028,
+-87.60059
+],
+"count": 14
+},
+{
+"slug": "south-deering",
+"display": "South Deering",
+"area": "far-southeast-side",
+"centroid": [
+41.71199,
+-87.56496
+],
+"count": 19
+},
+{
+"slug": "east-side",
+"display": "East Side",
+"area": "far-southeast-side",
+"centroid": [
+41.70616,
+-87.53528
+],
+"count": 28
+},
+{
+"slug": "west-pullman",
+"display": "West Pullman",
+"area": "far-southeast-side",
+"centroid": [
+41.67624,
+-87.63284
+],
+"count": 26
+},
+{
+"slug": "riverdale",
+"display": "Riverdale",
+"area": "far-southeast-side",
+"centroid": [
+41.65588,
+-87.60708
+],
+"count": 10
+},
+{
+"slug": "hegewisch",
+"display": "Hegewisch",
+"area": "far-southeast-side",
+"centroid": [
+41.65937,
+-87.54599
+],
+"count": 14
+},
+{
+"slug": "garfield-ridge",
+"display": "Garfield Ridge",
+"area": "southwest-side",
+"centroid": [
+41.7953,
+-87.7682
+],
+"count": 31
+},
+{
+"slug": "archer-heights",
+"display": "Archer Heights",
+"area": "southwest-side",
+"centroid": [
+41.80732,
+-87.72673
+],
+"count": 16
+},
+{
+"slug": "brighton-park",
+"display": "Brighton Park",
+"area": "southwest-side",
+"centroid": [
+41.81566,
+-87.69767
+],
+"count": 22
+},
+{
+"slug": "mckinley-park",
+"display": "Mckinley Park",
+"area": "southwest-side",
+"centroid": [
+41.82908,
+-87.67503
+],
+"count": 8
+},
+{
+"slug": "bridgeport",
+"display": "Bridgeport",
+"area": "south-side",
+"centroid": [
+41.83679,
+-87.64918
+],
+"count": 14
+},
+{
+"slug": "new-city",
+"display": "New City",
+"area": "southwest-side",
+"centroid": [
+41.80678,
+-87.66123
+],
+"count": 31
+},
+{
+"slug": "west-elsdon",
+"display": "West Elsdon",
+"area": "southwest-side",
+"centroid": [
+41.79324,
+-87.7251
+],
+"count": 8
+},
+{
+"slug": "gage-park",
+"display": "Gage Park",
+"area": "southwest-side",
+"centroid": [
+41.79575,
+-87.69733
+],
+"count": 21
+},
+{
+"slug": "clearing",
+"display": "Clearing",
+"area": "southwest-side",
+"centroid": [
+41.77879,
+-87.7746
+],
+"count": 14
+},
+{
+"slug": "west-lawn",
+"display": "West Lawn",
+"area": "southwest-side",
+"centroid": [
+41.77213,
+-87.72461
+],
+"count": 25
+},
+{
+"slug": "chicago-lawn",
+"display": "Chicago Lawn",
+"area": "southwest-side",
+"centroid": [
+41.77366,
+-87.69652
+],
+"count": 41
+},
+{
+"slug": "west-englewood",
+"display": "West Englewood",
+"area": "southwest-side",
+"centroid": [
+41.77402,
+-87.66594
+],
+"count": 18
+},
+{
+"slug": "englewood",
+"display": "Englewood",
+"area": "southwest-side",
+"centroid": [
+41.77732,
+-87.64369
+],
+"count": 22
+},
+{
+"slug": "greater-grand-crossing",
+"display": "Greater Grand Crossing",
+"area": "south-side",
+"centroid": [
+41.76258,
+-87.61292
+],
+"count": 22
+},
+{
+"slug": "ashburn",
+"display": "Ashburn",
+"area": "far-southwest-side",
+"centroid": [
+41.74506,
+-87.70512
+],
+"count": 37
+},
+{
+"slug": "auburn-gresham",
+"display": "Auburn Gresham",
+"area": "far-southwest-side",
+"centroid": [
+41.74347,
+-87.65924
+],
+"count": 41
+},
+{
+"slug": "beverly",
+"display": "Beverly",
+"area": "far-southwest-side",
+"centroid": [
+41.71121,
+-87.67622
+],
+"count": 21
+},
+{
+"slug": "washington-heights",
+"display": "Washington Heights",
+"area": "far-southwest-side",
+"centroid": [
+41.71847,
+-87.64744
+],
+"count": 27
+},
+{
+"slug": "mount-greenwood",
+"display": "Mount Greenwood",
+"area": "far-southwest-side",
+"centroid": [
+41.69608,
+-87.70435
+],
+"count": 16
+},
+{
+"slug": "morgan-park",
+"display": "Morgan Park",
+"area": "far-southwest-side",
+"centroid": [
+41.69146,
+-87.66674
+],
+"count": 28
+},
+{
+"slug": "ohare",
+"display": "Ohare",
+"area": "far-north-side",
+"centroid": [
+41.9771,
+-87.83964
+],
+"count": 4
+},
+{
+"slug": "edgewater",
+"display": "Edgewater",
+"area": "far-north-side",
+"centroid": [
+41.987,
+-87.66169
+],
+"count": 14
+},
+{
+"slug": "evanston",
+"display": "Evanston",
+"area": "evanston",
+"centroid": [
+42.04459,
+-87.68175
+],
+"count": 25
+}
+]

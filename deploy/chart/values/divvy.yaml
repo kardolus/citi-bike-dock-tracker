@@ -1,0 +1,16 @@
+name: divvy
+pgPort: 5442
+gbfs:
+  informationUrl: https://gbfs.lyft.com/gbfs/2.3/chi/en/station_information.json
+  statusUrl: https://gbfs.lyft.com/gbfs/2.3/chi/en/station_status.json
+userAgent: "divvy-bikeshare-tracker/1.0 (+https://divvy.kardol.us; unofficial, public GBFS)"
+cityId: chicago
+brand: Divvy
+domain: divvy.kardol.us
+timezone: America/Chicago
+hasEbikes: true
+defaultScope: everywhere
+neighborhoodLabel: Neighborhood
+description: "Live Divvy dock availability and 90-day patterns across Chicago — 2,000+ stations, neighborhood by neighborhood."
+umamiId: 5fba728f-fac5-4b39-a5ca-ed9f2c8dd4ef
+areaOverrides: "{}"
