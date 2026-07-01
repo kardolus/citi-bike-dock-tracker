@@ -30,5 +30,5 @@ serviceHours: ""         # "HH:MM-HH:MM" local if the system closes overnight (e
 defaultLang: en          # fallback UI language (en/es/fr) when the browser asks for something unsupported
 
 images:
-  ingester: ghcr.io/kardolus/citi-bike-dock-tracker:v17
-  web: ghcr.io/kardolus/citibike-web:v65
+  ingester: ghcr.io/kardolus/citi-bike-dock-tracker:v19
+  web: ghcr.io/kardolus/citibike-web:v66
