@@ -37,5 +37,5 @@ defaultLang: en          # fallback UI language (en/es/fr) when the browser asks
 images:
   # ingester still on the pre-rename GHCR package (registry doesn't follow repo
   # renames); switches to ghcr.io/kardolus/dockscan on its next image bump.
-  ingester: ghcr.io/kardolus/citi-bike-dock-tracker:v20
+  ingester: ghcr.io/kardolus/citi-bike-dock-tracker:v25
   web: ghcr.io/kardolus/bikeshare-web:v70

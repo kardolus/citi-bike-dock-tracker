@@ -7,6 +7,7 @@ package metrics
 import (
 	"fmt"
 	"net/http"
+	"sync"
 	"sync/atomic"
 	"time"
 )
@@ -19,8 +20,11 @@ var (
 	stations    int64
 	lastSuccess int64 // unix seconds of the last successful fetch+write
 
-	// readiness grace: not ready until a recent successful ingest
-	readyGrace = 300 * time.Second
+	// readiness check: reports whether the pod's dependencies (the DB) are
+	// reachable. Registered by the ingester once its DB handle is open.
+	// Deliberately NOT tied to ingest freshness — see the /ready handler.
+	readyMu    sync.RWMutex
+	readyCheck func() error
 )
 
 func IncPolls()             { atomic.AddUint64(&polls, 1) }
@@ -29,6 +33,15 @@ func IncFetchError()        { atomic.AddUint64(&fetchErrors, 1) }
 func IncDBError()           { atomic.AddUint64(&dbErrors, 1) }
 func SetStations(n int)     { atomic.StoreInt64(&stations, int64(n)) }
 func MarkSuccess(t time.Time) { atomic.StoreInt64(&lastSuccess, t.Unix()) }
+
+// SetReadyCheck registers the function /ready consults to decide readiness.
+// A nil error means ready. Passing nil clears the check (readiness falls back
+// to "process is up").
+func SetReadyCheck(fn func() error) {
+	readyMu.Lock()
+	readyCheck = fn
+	readyMu.Unlock()
+}
 
 // Handler returns the mux serving /metrics, /healthz (liveness) and /ready.
 func Handler() http.Handler {
@@ -40,16 +53,25 @@ func Handler() http.Handler {
 		_, _ = w.Write([]byte("ok\n"))
 	})
 
-	// readiness: a successful ingest happened recently
+	// readiness: the process is up and its dependencies (the DB) are reachable.
+	// Deliberately NOT gated on ingest freshness — a transient upstream GBFS
+	// outage must not flip the pod NotReady, which would page critically for a
+	// remote data-source blip. Ingest staleness is surfaced separately via the
+	// citibike_poll_success_timestamp_seconds metric + the CitibikeIngestStalled
+	// warning alert.
 	mux.HandleFunc("/ready", func(w http.ResponseWriter, _ *http.Request) {
-		last := atomic.LoadInt64(&lastSuccess)
-		if last > 0 && time.Since(time.Unix(last, 0)) < readyGrace {
-			w.WriteHeader(http.StatusOK)
-			_, _ = w.Write([]byte("ready\n"))
-			return
+		readyMu.RLock()
+		chk := readyCheck
+		readyMu.RUnlock()
+		if chk != nil {
+			if err := chk(); err != nil {
+				w.WriteHeader(http.StatusServiceUnavailable)
+				_, _ = fmt.Fprintf(w, "not ready: %v\n", err)
+				return
+			}
 		}
-		w.WriteHeader(http.StatusServiceUnavailable)
-		_, _ = w.Write([]byte("not ready: no recent successful ingest\n"))
+		w.WriteHeader(http.StatusOK)
+		_, _ = w.Write([]byte("ready\n"))
 	})
 
 	mux.HandleFunc("/metrics", func(w http.ResponseWriter, _ *http.Request) {

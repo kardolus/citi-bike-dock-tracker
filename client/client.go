@@ -1,6 +1,7 @@
 package client
 
 import (
+	"context"
 	"database/sql"
 	"encoding/csv"
 	"encoding/json"
@@ -661,6 +662,16 @@ func (c *Client) IngestPostgres(dsn string) error {
 			}
 		}
 	}
+	// Readiness now reflects "process up + DB reachable", independent of whether
+	// the upstream GBFS feed is currently answering. A brief DB ping (bounded so
+	// it resolves within the probe's timeout) drives /ready; upstream fetch
+	// failures are tracked via metrics/alerts instead of flipping the pod down.
+	metrics.SetReadyCheck(func() error {
+		ctx, cancel := context.WithTimeout(context.Background(), 2*time.Second)
+		defer cancel()
+		return db.PingContext(ctx)
+	})
+
 	log.Printf("ingesting to postgres every %ds (%d stations tracked)", c.interval, len(c.stationMap))
 
 	for {
